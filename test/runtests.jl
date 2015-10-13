@@ -21,7 +21,7 @@ end
 
 # For coverage.
 meta = Amd{Clong}()
-A = sprand(10, 10, .5)
+A = convert(SparseMatrixCSC{Float64,Clong}, sprand(10, 10, .5))
 p = amd(A, meta)
 show(meta)
 print(meta)
