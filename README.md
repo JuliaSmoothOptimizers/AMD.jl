@@ -1,6 +1,7 @@
 # AMD
 
 [![Build Status](https://travis-ci.org/dpo/AMD.jl.svg?branch=master)](https://travis-ci.org/dpo/AMD.jl)
+[![Build status](https://ci.appveyor.com/api/projects/status/6wrr7rwl7qpox3ny/branch/master?svg=true)](https://ci.appveyor.com/project/dpo/amd-jl/branch/master)
 [![Coverage Status](https://coveralls.io/repos/dpo/AMD.jl/badge.svg?branch=master&service=github)](https://coveralls.io/github/dpo/AMD.jl?branch=master)
 
 Given a square sparse matrix, compute an approximate minimum degree ordering.
