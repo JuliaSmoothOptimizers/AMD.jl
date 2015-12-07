@@ -17,4 +17,4 @@ script:
   - julia --check-bounds=yes -e 'Pkg.clone(pwd()); Pkg.build("AMD"); Pkg.test("AMD"; coverage=true)'
 
 after_success:
-  - julia -e 'cd(Pkg.dir("$pkg_name")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
+  - julia -e 'cd(Pkg.dir("AMD")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
