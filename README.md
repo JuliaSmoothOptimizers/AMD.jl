@@ -1,8 +1,8 @@
 # AMD
 
-[![Build Status](https://travis-ci.org/JuliaOptimizers/AMD.jl.svg?branch=master)](https://travis-ci.org/JuliaOptimizers/AMD.jl)
-[![Build status](https://ci.appveyor.com/api/projects/status/6wrr7rwl7qpox3ny/branch/master?svg=true)](https://ci.appveyor.com/project/dpo/amd-jl/branch/master)
-[![codecov.io](https://codecov.io/github/JuliaOptimizers/AMD.jl/coverage.svg?branch=master)](https://codecov.io/github/JuliaOptimizers/AMD.jl?branch=master)
+[![Build Status](https://travis-ci.org/JuliaSmoothOptimizers/AMD.jl.svg?branch=master)](https://travis-ci.org/JuliaSmoothOptimizers/AMD.jl)
+[![Build status](https://ci.appveyor.com/api/projects/status/6wrr7rwl7qpox3ny/branch/master?svg=true)](https://ci.appveyor.com/project/JuliaSmoothOptimizers/amd-jl/branch/master)
+[![codecov.io](https://codecov.io/github/JuliaSmoothOptimizers/AMD.jl/coverage.svg?branch=master)](https://codecov.io/github/JuliaSmoothOptimizers/AMD.jl?branch=master)
 
 Given a square sparse matrix, compute an approximate minimum degree ordering.
 This package is an interface to the AMD library of Amestoy, Davis and Duff.
@@ -10,7 +10,7 @@ This package is an interface to the AMD library of Amestoy, Davis and Duff.
 ### Installing
 
 ```JULIA
-Pkg.clone("https://github.com/dpo/AMD.jl.git")
+Pkg.clone("https://github.com/JuliaSmoothOptimizers/AMD.jl.git")
 Pkg.test("AMD")
 ```
 
