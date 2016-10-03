@@ -1,7 +1,5 @@
 module AMD
 
-using Compat
-
 export Amd, amd_valid, amd
 export AMD_DENSE, AMD_AGGRESSIVE
 export AMD_STATUS, AMD_N, AMD_NZ, AMD_SYMMETRY, AMD_NZDIAG,
@@ -10,7 +8,7 @@ export AMD_STATUS, AMD_N, AMD_NZ, AMD_SYMMETRY, AMD_NZDIAG,
        AMD_DMAX
 export AMD_OK, AMD_OUT_OF_MEMORY, AMD_INVALID, AMD_OK_BUT_JUMBLED
 
-@compat typealias AmdIntType Union{Cint, Clong}
+typealias AmdIntType Union{Cint, Clong}
 
 const AMD_CONTROL = 5  # size of control array
 const AMD_INFO = 20    # size of info array
@@ -41,11 +39,11 @@ const AMD_OUT_OF_MEMORY = -1  # malloc failed or problem too large
 const AMD_INVALID = -2        # input arguments not valid
 const AMD_OK_BUT_JUMBLED = 1  # input ok but AMD will need to perform extra work
 
-const statuses = @compat Dict(AMD_OK => "ok",
-                              AMD_OUT_OF_MEMORY => "out of memory",
-                              AMD_INVALID => "input invalid",
-                              AMD_OK_BUT_JUMBLED => "ok but jumbled",
-                             )
+const statuses = Dict(AMD_OK => "ok",
+                      AMD_OUT_OF_MEMORY => "out of memory",
+                      AMD_INVALID => "input invalid",
+                      AMD_OK_BUT_JUMBLED => "ok but jumbled",
+                     )
 
 include("amd_functions.jl")
 
