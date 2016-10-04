@@ -10,7 +10,7 @@ This package is an interface to the AMD library of Amestoy, Davis and Duff.
 ### Installing
 
 ```JULIA
-Pkg.clone("https://github.com/JuliaSmoothOptimizers/AMD.jl.git")
+Pkg.add("AMD")
 Pkg.test("AMD")
 ```
 
