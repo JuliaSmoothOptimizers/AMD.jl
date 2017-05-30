@@ -8,8 +8,6 @@ export AMD_STATUS, AMD_N, AMD_NZ, AMD_SYMMETRY, AMD_NZDIAG,
        AMD_DMAX
 export AMD_OK, AMD_OUT_OF_MEMORY, AMD_INVALID, AMD_OK_BUT_JUMBLED
 
-typealias AmdIntType Union{Cint, Clong}
-
 const AMD_CONTROL = 5  # size of control array
 const AMD_INFO = 20    # size of info array
 
@@ -58,21 +56,21 @@ row will be treated as dense.
 
 `info` is a vector of C doubles that contains statistics on the ordering.
 """
-type Amd{T <: AmdIntType}
+type Amd
   control :: Vector{Cdouble}
   info :: Vector{Cdouble}
 
   function Amd()
     control = zeros(Cdouble, AMD_CONTROL)
     info = zeros(Cdouble, AMD_INFO)
-    ccall(T == Cint ? _amd_defaults : _amd_l_defaults, Void, (Ptr{Cdouble},), control)
+    ccall(_amd_defaults, Void, (Ptr{Cdouble},), control)
     return new(control, info)
   end
 end
 
 import Base.show, Base.print
 
-function show{T <: AmdIntType}(io :: IO, meta :: Amd{T})
+function show(io :: IO, meta :: Amd)
   s  = "Control:\n"
   s *= "  dense row parameter: $(meta.control[AMD_DENSE])\n"
   s *= "  aggressive absorption: $(meta.control[AMD_AGGRESSIVE])\n"
@@ -86,7 +84,7 @@ function show{T <: AmdIntType}(io :: IO, meta :: Amd{T})
   print(io, s)
 end
 
-function print{T <: AmdIntType}(io :: IO, meta :: Amd{T})
+function print(io :: IO, meta :: Amd)
   s  = "Control:\n"
   s *= "  dense row parameter: $(meta.control[AMD_DENSE])\n"
   s *= "  aggressive absorption: $(meta.control[AMD_AGGRESSIVE])\n"
@@ -108,45 +106,61 @@ function print{T <: AmdIntType}(io :: IO, meta :: Amd{T})
   print(io, s)
 end
 
-function amd_valid{T <: AmdIntType}(A :: SparseMatrixCSC{Float64,T})
-  nrow, ncol = size(A)
-  colptr = A.colptr - 1  # 0-based indexing
-  rowval = A.rowval - 1
-  valid = @eval ccall($T == Cint ? _amd_valid : _amd_l_valid, $T,
-                      ($T, $T, Ptr{$T}, Ptr{$T}), $nrow, $ncol, $colptr, $rowval)
-  return valid in [AMD_OK, AMD_OK_BUT_JUMBLED]
+for (validfn, typ) in ((_amd_valid, Cint), (_amd_l_valid, Clong))
+
+  @eval begin
+
+    function amd_valid(A :: SparseMatrixCSC{Float64,$typ})
+      nrow, ncol = size(A)
+      colptr = A.colptr - $typ(1)  # 0-based indexing
+      rowval = A.rowval - $typ(1)
+      valid = ccall($validfn, $typ,
+                    ($typ, $typ, Ptr{$typ}, Ptr{$typ}), nrow, ncol, colptr, rowval)
+      return valid == AMD_OK || valid == AMD_OK_BUT_JUMBLED
+    end
+
+  end
 end
 
-"""Given a sparse matrix `A` and an `Amd` structure `meta`, `p = amd(A, meta)`
-computes the approximate minimum degree ordering of `A + A'`. The ordering is
-represented as a permutation vector `p`. Factorizations of `A[p,p]` tend to
-be sparser than those of `A`.
 
-The matrix `A` must be square and the sparsity pattern of `A + A'` is implicit.
-Thus it is convenient to represent symmetric matrices using one triangle only.
-The diagonal of `A` may be present but will be ignored.
+for (orderfn, typ) in ((_amd_order, Cint), (_amd_l_order, Clong))
 
-The ordering may be influenced by changing `meta.control[AMD_DENSE]` and
-`meta.control[AMD_AGGRESSIVE]`.
+  @eval begin
 
-Statistics on the ordering appear in `meta.info`.
-"""
-function amd{T <: AmdIntType}(A :: SparseMatrixCSC{Float64,T}, meta :: Amd{T})
-  nrow, ncol = size(A)
-  nrow == ncol || error("AMD: input matrix must be square")
-  colptr = A.colptr - 1  # 0-based indexing
-  rowval = A.rowval - 1
+    """Given a sparse matrix `A` and an `Amd` structure `meta`, `p = amd(A, meta)`
+    computes the approximate minimum degree ordering of `A + A'`. The ordering is
+    represented as a permutation vector `p`. Factorizations of `A[p,p]` tend to
+    be sparser than those of `A`.
 
-  p = zeros(T, nrow)
-  valid = @eval ccall($T == Cint ? _amd_order : _amd_l_order, $T,
-                      ($T,    Ptr{$T}, Ptr{$T}, Ptr{$T}, Ptr{Cdouble},    Ptr{Cdouble}),
-                       $nrow, $colptr, $rowval, $p,      $(meta.control), $(meta.info))
-  valid in [AMD_OK, AMD_OK_BUT_JUMBLED] || error("amd_order returns $valid")
-  return p+1
+    The matrix `A` must be square and the sparsity pattern of `A + A'` is implicit.
+    Thus it is convenient to represent symmetric matrices using one triangle only.
+    The diagonal of `A` may be present but will be ignored.
+
+    The ordering may be influenced by changing `meta.control[AMD_DENSE]` and
+    `meta.control[AMD_AGGRESSIVE]`.
+
+    Statistics on the ordering appear in `meta.info`.
+    """
+    function amd(A::SparseMatrixCSC{Float64,$typ}, meta::Amd)
+      nrow, ncol = size(A)
+      nrow == ncol || error("AMD: input matrix must be square")
+      colptr = A.colptr - $typ(1)  # 0-based indexing
+      rowval = A.rowval - $typ(1)
+
+      p = zeros($typ, nrow)
+      valid = ccall($orderfn, $typ,
+                    ($typ, Ref{$typ}, Ref{$typ}, Ptr{$typ}, Ptr{Cdouble}, Ptr{Cdouble}),
+                     nrow, colptr,    rowval,    p,         meta.control, meta.info)
+      (valid == AMD_OK || valid == AMD_OK_BUT_JUMBLED) || throw("amd_order returns: $(statuses[valid])")
+      p .+= 1
+      return p
+    end
+
+  end
 end
 
-function amd{T <: AmdIntType}(A :: SparseMatrixCSC{Float64,T})
-  meta = Amd{T}()
+function amd{T <: Union{Cint, Clong}}(A :: SparseMatrixCSC{Float64,T})
+  meta = Amd()
   amd(A, meta)
 end
 
