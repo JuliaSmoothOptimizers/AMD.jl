@@ -7,7 +7,7 @@ for n in [10, 20, 30]
       A = convert(SparseMatrixCSC{Float64,T}, sprand(n, n, density))
       @assert amd_valid(A)
 
-      meta = Amd{T}()
+      meta = Amd()
       p = amd(A, meta)
       @assert meta.info[AMD_STATUS] == AMD_OK
       @assert minimum(p) == 1
@@ -20,7 +20,7 @@ for n in [10, 20, 30]
 end
 
 # For coverage.
-meta = Amd{Clong}()
+meta = Amd()
 A = convert(SparseMatrixCSC{Float64,Clong}, sprand(10, 10, .5))
 p = amd(A, meta)
 show(meta)
