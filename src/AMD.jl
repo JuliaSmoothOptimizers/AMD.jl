@@ -127,20 +127,6 @@ for (orderfn, typ) in ((_amd_order, Cint), (_amd_l_order, Clong))
 
   @eval begin
 
-    """Given a sparse matrix `A` and an `Amd` structure `meta`, `p = amd(A, meta)`
-    computes the approximate minimum degree ordering of `A + A'`. The ordering is
-    represented as a permutation vector `p`. Factorizations of `A[p,p]` tend to
-    be sparser than those of `A`.
-
-    The matrix `A` must be square and the sparsity pattern of `A + A'` is implicit.
-    Thus it is convenient to represent symmetric matrices using one triangle only.
-    The diagonal of `A` may be present but will be ignored.
-
-    The ordering may be influenced by changing `meta.control[AMD_DENSE]` and
-    `meta.control[AMD_AGGRESSIVE]`.
-
-    Statistics on the ordering appear in `meta.info`.
-    """
     function amd(A::SparseMatrixCSC{Float64,$typ}, meta::Amd)
       nrow, ncol = size(A)
       nrow == ncol || error("AMD: input matrix must be square")
@@ -163,5 +149,28 @@ function amd{T <: Union{Cint, Clong}}(A :: SparseMatrixCSC{Float64,T})
   meta = Amd()
   amd(A, meta)
 end
+
+"""
+    amd(A, meta)
+
+or
+
+    amd(A)
+
+Given a sparse matrix `A` and an `Amd` structure `meta`, `p = amd(A, meta)`
+computes the approximate minimum degree ordering of `A + A'`. The ordering is
+represented as a permutation vector `p`. Factorizations of `A[p,p]` tend to
+be sparser than those of `A`.
+
+The matrix `A` must be square and the sparsity pattern of `A + A'` is implicit.
+Thus it is convenient to represent symmetric matrices using one triangle only.
+The diagonal of `A` may be present but will be ignored.
+
+The ordering may be influenced by changing `meta.control[AMD_DENSE]` and
+`meta.control[AMD_AGGRESSIVE]`.
+
+Statistics on the ordering appear in `meta.info`.
+"""
+amd
 
 end # module
