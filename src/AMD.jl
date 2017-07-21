@@ -110,7 +110,7 @@ for (validfn, typ) in ((_amd_valid, Cint), (_amd_l_valid, Clong))
 
   @eval begin
 
-    function amd_valid(A :: SparseMatrixCSC{Float64,$typ})
+    function amd_valid{F}(A :: SparseMatrixCSC{F,$typ})
       nrow, ncol = size(A)
       colptr = A.colptr - $typ(1)  # 0-based indexing
       rowval = A.rowval - $typ(1)
@@ -127,7 +127,7 @@ for (orderfn, typ) in ((_amd_order, Cint), (_amd_l_order, Clong))
 
   @eval begin
 
-    function amd(A::SparseMatrixCSC{Float64,$typ}, meta::Amd)
+    function amd{F}(A::SparseMatrixCSC{F,$typ}, meta::Amd)
       nrow, ncol = size(A)
       nrow == ncol || error("AMD: input matrix must be square")
       colptr = A.colptr - $typ(1)  # 0-based indexing
@@ -145,7 +145,7 @@ for (orderfn, typ) in ((_amd_order, Cint), (_amd_l_order, Clong))
   end
 end
 
-function amd{T <: Union{Cint, Clong}}(A :: SparseMatrixCSC{Float64,T})
+function amd{F,T<:Union{Cint,Clong}}(A :: SparseMatrixCSC{F,T})
   meta = Amd()
   amd(A, meta)
 end
