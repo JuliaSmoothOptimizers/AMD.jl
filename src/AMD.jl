@@ -106,7 +106,7 @@ function print(io :: IO, meta :: Amd)
   print(io, s)
 end
 
-for (validfn, typ) in ((_amd_valid, Cint), (_amd_l_valid, Clong))
+for (validfn, typ) in ((:_amd_valid, Cint), (:_amd_l_valid, Clong))
 
   @eval begin
 
@@ -123,7 +123,7 @@ for (validfn, typ) in ((_amd_valid, Cint), (_amd_l_valid, Clong))
 end
 
 
-for (orderfn, typ) in ((_amd_order, Cint), (_amd_l_order, Clong))
+for (orderfn, typ) in ((:_amd_order, Cint), (:_amd_l_order, Clong))
 
   @eval begin
 
