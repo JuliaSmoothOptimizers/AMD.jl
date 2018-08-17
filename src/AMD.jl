@@ -56,7 +56,7 @@ row will be treated as dense.
 
 `info` is a vector of C doubles that contains statistics on the ordering.
 """
-type Amd
+mutable struct Amd
   control :: Vector{Cdouble}
   info :: Vector{Cdouble}
 
@@ -112,10 +112,10 @@ for (validfn, typ) in ((:_amd_valid, Cint), (:_amd_l_valid, _Clong))
 
   @eval begin
 
-    function amd_valid{F}(A :: SparseMatrixCSC{F,$typ})
+    function amd_valid(A :: SparseMatrixCSC{F,$typ}) where F
       nrow, ncol = size(A)
-      colptr = A.colptr - $typ(1)  # 0-based indexing
-      rowval = A.rowval - $typ(1)
+      colptr = A.colptr .- $typ(1)  # 0-based indexing
+      rowval = A.rowval .- $typ(1)
       valid = ccall($validfn, $typ,
                     ($typ, $typ, Ptr{$typ}, Ptr{$typ}), nrow, ncol, colptr, rowval)
       return valid == AMD_OK || valid == AMD_OK_BUT_JUMBLED
@@ -129,11 +129,11 @@ for (orderfn, typ) in ((:_amd_order, Cint), (:_amd_l_order, _Clong))
 
   @eval begin
 
-    function amd{F}(A::SparseMatrixCSC{F,$typ}, meta::Amd)
+    function amd(A::SparseMatrixCSC{F,$typ}, meta::Amd) where F
       nrow, ncol = size(A)
       nrow == ncol || error("AMD: input matrix must be square")
-      colptr = A.colptr - $typ(1)  # 0-based indexing
-      rowval = A.rowval - $typ(1)
+      colptr = A.colptr .- $typ(1)  # 0-based indexing
+      rowval = A.rowval .- $typ(1)
 
       p = zeros($typ, nrow)
       valid = ccall($orderfn, $typ,
@@ -147,7 +147,7 @@ for (orderfn, typ) in ((:_amd_order, Cint), (:_amd_l_order, _Clong))
   end
 end
 
-function amd{F,T<:Union{Cint,_Clong}}(A :: SparseMatrixCSC{F,T})
+function amd(A :: SparseMatrixCSC{F,T}) where {F,T<:Union{Cint,_Clong}}
   meta = Amd()
   amd(A, meta)
 end

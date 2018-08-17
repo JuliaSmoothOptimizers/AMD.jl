@@ -1,3 +1,9 @@
+if VERSION < v"0.7.0-DEV.3382"
+  using Base.Libdl
+else
+  using Libdl
+end
+
 function __init__()
   global const _libamd = Libdl.dlopen("libamd")
 
