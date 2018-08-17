@@ -1,9 +1,10 @@
 using AMD
 using Base.Test
 
+_Clong = Base.Sys.WORD_SIZE == 32 ? Clong : Clonglong
 for n in [10, 20, 30]
   for density in [.25, .75, 1.0]
-    for T in [Cint, Clong]
+    for T in [Cint, _Clong]
       A = convert(SparseMatrixCSC{Float64,T}, sprand(n, n, density))
       @assert amd_valid(A)
 
@@ -21,7 +22,7 @@ end
 
 # For coverage.
 meta = Amd()
-A = convert(SparseMatrixCSC{Float64,Clong}, sprand(10, 10, .5))
+A = convert(SparseMatrixCSC{Float64,_Clong}, sprand(10, 10, .5))
 p = amd(A, meta)
 show(meta)
 print(meta)

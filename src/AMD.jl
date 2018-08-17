@@ -106,7 +106,9 @@ function print(io :: IO, meta :: Amd)
   print(io, s)
 end
 
-for (validfn, typ) in ((:_amd_valid, Cint), (:_amd_l_valid, Clong))
+_Clong = Base.Sys.WORD_SIZE == 32 ? Clong : Clonglong
+
+for (validfn, typ) in ((:_amd_valid, Cint), (:_amd_l_valid, _Clong))
 
   @eval begin
 
@@ -123,7 +125,7 @@ for (validfn, typ) in ((:_amd_valid, Cint), (:_amd_l_valid, Clong))
 end
 
 
-for (orderfn, typ) in ((:_amd_order, Cint), (:_amd_l_order, Clong))
+for (orderfn, typ) in ((:_amd_order, Cint), (:_amd_l_order, _Clong))
 
   @eval begin
 
@@ -145,7 +147,7 @@ for (orderfn, typ) in ((:_amd_order, Cint), (:_amd_l_order, Clong))
   end
 end
 
-function amd{F,T<:Union{Cint,Clong}}(A :: SparseMatrixCSC{F,T})
+function amd{F,T<:Union{Cint,_Clong}}(A :: SparseMatrixCSC{F,T})
   meta = Amd()
   amd(A, meta)
 end
