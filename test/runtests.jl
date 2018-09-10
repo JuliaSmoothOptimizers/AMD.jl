@@ -1,14 +1,4 @@
-using AMD
-if VERSION < v"0.7.0-DEV.2005"
-  using Base.Test
-else
-  using Test
-end
-if VERSION < v"0.7.0-DEV.3389"
-  const SparseArrays = Base.SparseArrays
-else
-  using SparseArrays
-end
+using AMD, Test, SparseArrays
 
 _Clong = Base.Sys.WORD_SIZE == 32 ? Clong : Clonglong
 for n in [10, 20, 30]

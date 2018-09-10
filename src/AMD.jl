@@ -1,5 +1,7 @@
 module AMD
 
+using SparseArrays
+
 export Amd, amd_valid, amd
 export AMD_DENSE, AMD_AGGRESSIVE
 export AMD_STATUS, AMD_N, AMD_NZ, AMD_SYMMETRY, AMD_NZDIAG,
@@ -63,7 +65,7 @@ mutable struct Amd
   function Amd()
     control = zeros(Cdouble, AMD_CONTROL)
     info = zeros(Cdouble, AMD_INFO)
-    ccall(_amd_defaults, Void, (Ptr{Cdouble},), control)
+    ccall(_amd_defaults, Nothing, (Ptr{Cdouble},), control)
     return new(control, info)
   end
 end
