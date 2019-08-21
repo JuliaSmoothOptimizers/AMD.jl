@@ -8,6 +8,7 @@ os:
 julia:
   - 1.0
   - 1.1
+  - 1.2
   - nightly
 
 matrix:
@@ -20,10 +21,6 @@ branches:
 
 notifications:
   email: false
-
-script:
-  - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-  - julia --check-bounds=yes -e 'using Pkg; Pkg.clone(pwd()); Pkg.build("AMD"); Pkg.test("AMD"; coverage=true)'
 
 after_success:
   - julia -e 'cd(Pkg.dir("AMD")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
