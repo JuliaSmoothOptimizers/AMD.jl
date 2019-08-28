@@ -1,5 +1,6 @@
 module AMD
 
+using LinearAlgebra
 using SparseArrays
 
 export Amd, amd_valid, amd
@@ -123,6 +124,8 @@ for (validfn, typ) in ((:_amd_valid, Cint), (:_amd_l_valid, _Clong))
       return valid == AMD_OK || valid == AMD_OK_BUT_JUMBLED
     end
 
+    amd_valid(A :: Symmetric{F,SparseMatrixCSC{F,$typ}}) where F = amd_valid(A.data)
+
   end
 end
 
@@ -146,6 +149,8 @@ for (orderfn, typ) in ((:_amd_order, Cint), (:_amd_l_order, _Clong))
       return p
     end
 
+    amd(A :: Symmetric{F,SparseMatrixCSC{F,$typ}}, meta::Amd) where F = amd(A.data, meta)
+
   end
 end
 
@@ -153,6 +158,8 @@ function amd(A :: SparseMatrixCSC{F,T}) where {F,T<:Union{Cint,_Clong}}
   meta = Amd()
   amd(A, meta)
 end
+
+amd(A :: Symmetric{F,SparseMatrixCSC{F,T}}) where {F,T<:Union{Cint,_Clong}} = amd(A.data)
 
 """
     amd(A, meta)
