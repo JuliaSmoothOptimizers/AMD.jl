@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/JuliaSmoothOptimizers/AMD.jl.svg?branch=master)](https://travis-ci.org/JuliaSmoothOptimizers/AMD.jl)
 [![Build status](https://ci.appveyor.com/api/projects/status/6wrr7rwl7qpox3ny/branch/master?svg=true)](https://ci.appveyor.com/project/JuliaSmoothOptimizers/amd-jl/branch/master)
+[![Build Status](https://api.cirrus-ci.com/github/JuliaSmoothOptimizers/AMD.jl.svg)](https://cirrus-ci.com/github/JuliaSmoothOptimizers/AMD.jl)
 [![codecov.io](https://codecov.io/github/JuliaSmoothOptimizers/AMD.jl/coverage.svg?branch=master)](https://codecov.io/github/JuliaSmoothOptimizers/AMD.jl?branch=master)
 
 Given a square sparse matrix, compute an approximate minimum degree ordering.
