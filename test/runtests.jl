@@ -35,9 +35,32 @@ for n in [10, 20, 30]
   end
 end
 
+for n in [10, 20, 30]
+  for m in [10, 20, 30]
+    for density in [.25, .75, 1.0]
+      for T in [Cint, _Clong]
+        A = convert(SparseMatrixCSC{Float64,T}, sprand(n, m, density))
+
+        meta = Colamd{T}()
+        p = colamd(A, meta)
+        @test meta.stats[COLAMD_STATUS] == COLAMD_OK
+        @test minimum(p) == 1
+        @test maximum(p) == m
+        q = colamd(A)
+        @test all(p .== q)
+      end
+    end
+  end
+end
+
 # For coverage.
 meta = Amd()
-A = convert(SparseMatrixCSC{Float64,_Clong}, sprand(10, 10, .5))
+A = convert(SparseMatrixCSC{Float64,Cint}, sprand(10, 10, .5))
 p = amd(A, meta)
+show(meta)
+print(meta)
+
+meta = Colamd{Cint}()
+p = colamd(A, meta)
 show(meta)
 print(meta)
