@@ -3,6 +3,13 @@ module AMD
 using LinearAlgebra
 using SparseArrays
 
+import Base.show, Base.print
+
+_Clong = Base.Sys.WORD_SIZE == 32 ? Clong : Clonglong
+
+include("amd_functions.jl")
+include("COLAMD.jl")
+
 export Amd, amd_valid, amd
 export AMD_DENSE, AMD_AGGRESSIVE
 export AMD_STATUS, AMD_N, AMD_NZ, AMD_SYMMETRY, AMD_NZDIAG,
@@ -40,13 +47,11 @@ const AMD_OUT_OF_MEMORY = -1  # malloc failed or problem too large
 const AMD_INVALID = -2        # input arguments not valid
 const AMD_OK_BUT_JUMBLED = 1  # input ok but AMD will need to perform extra work
 
-const statuses = Dict(AMD_OK => "ok",
-                      AMD_OUT_OF_MEMORY => "out of memory",
-                      AMD_INVALID => "input invalid",
-                      AMD_OK_BUT_JUMBLED => "ok but jumbled",
-                     )
-
-include("amd_functions.jl")
+const amd_statuses = Dict(AMD_OK => "ok",
+                          AMD_OUT_OF_MEMORY => "out of memory",
+                          AMD_INVALID => "input invalid",
+                          AMD_OK_BUT_JUMBLED => "ok but jumbled",
+                         )
 
 """Base type to hold control and information related to a call to AMD.
 `control` is a vector of C doubles with components:
@@ -71,15 +76,13 @@ mutable struct Amd
   end
 end
 
-import Base.show, Base.print
-
 function show(io :: IO, meta :: Amd)
   s  = "Control:\n"
   s *= "  dense row parameter: $(meta.control[AMD_DENSE])\n"
   s *= "  aggressive absorption: $(meta.control[AMD_AGGRESSIVE])\n"
   s *= "Info:\n"
-  s *= "  status: $(statuses[meta.info[AMD_STATUS]])\n"
-  s *= "  number of nonzeros in A + A': $(meta.info[AMD_NZ_A_PLUS_AT])\n"
+  s *= "  status: $(amd_statuses[meta.info[AMD_STATUS]])\n"
+  s *= "  number of nonzeros in A + Aᵀ: $(meta.info[AMD_NZ_A_PLUS_AT])\n"
   s *= "  number of dense columns: $(meta.info[AMD_NDENSE])\n"
   s *= "  memory used: $(meta.info[AMD_MEMORY])\n"
   s *= "  approx number of nonzeros in factor: $(meta.info[AMD_LNZ])\n"
@@ -92,12 +95,12 @@ function print(io :: IO, meta :: Amd)
   s *= "  dense row parameter: $(meta.control[AMD_DENSE])\n"
   s *= "  aggressive absorption: $(meta.control[AMD_AGGRESSIVE])\n"
   s *= "Info:\n"
-  s *= "  status: $(statuses[meta.info[AMD_STATUS]])\n"
+  s *= "  status: $(amd_statuses[meta.info[AMD_STATUS]])\n"
   s *= "  matrix size: $(meta.info[AMD_N])\n"
   s *= "  number of nonzeros: $(meta.info[AMD_NZ])\n"
   s *= "  pattern symmetry: $(meta.info[AMD_SYMMETRY])\n"
   s *= "  number of nonzeros on diagonal: $(meta.info[AMD_NZDIAG])\n"
-  s *= "  number of nonzeros in A + A': $(meta.info[AMD_NZ_A_PLUS_AT])\n"
+  s *= "  number of nonzeros in A + Aᵀ: $(meta.info[AMD_NZ_A_PLUS_AT])\n"
   s *= "  number of dense columns: $(meta.info[AMD_NDENSE])\n"
   s *= "  memory used: $(meta.info[AMD_MEMORY])\n"
   s *= "  number of garbage collections: $(meta.info[AMD_NCMPA])\n"
@@ -108,8 +111,6 @@ function print(io :: IO, meta :: Amd)
   s *= "  max nonzeros in any column of factor: $(meta.info[AMD_DMAX])\n"
   print(io, s)
 end
-
-_Clong = Base.Sys.WORD_SIZE == 32 ? Clong : Clonglong
 
 for (validfn, typ) in ((:_amd_valid, Cint), (:_amd_l_valid, _Clong))
 
@@ -144,7 +145,7 @@ for (orderfn, typ) in ((:_amd_order, Cint), (:_amd_l_order, _Clong))
       valid = ccall($orderfn, $typ,
                     ($typ, Ref{$typ}, Ref{$typ}, Ptr{$typ}, Ptr{Cdouble}, Ptr{Cdouble}),
                      nrow, colptr,    rowval,    p,         meta.control, meta.info)
-      (valid == AMD_OK || valid == AMD_OK_BUT_JUMBLED) || throw("amd_order returns: $(statuses[valid])")
+      (valid == AMD_OK || valid == AMD_OK_BUT_JUMBLED) || throw("amd returns: $(amd_statuses[valid])")
       p .+= 1
       return p
     end
@@ -159,7 +160,7 @@ function amd(A :: SparseMatrixCSC{F,T}) where {F,T<:Union{Cint,_Clong}}
   amd(A, meta)
 end
 
-amd(A :: Symmetric{F,SparseMatrixCSC{F,T}}) where {F,T<:Union{Cint,_Clong}} = amd(A.data)
+@inline amd(A :: Symmetric{F,SparseMatrixCSC{F,T}}) where {F,T<:Union{Cint,_Clong}} = amd(A.data)
 
 """
     amd(A, meta)
@@ -169,11 +170,11 @@ or
     amd(A)
 
 Given a sparse matrix `A` and an `Amd` structure `meta`, `p = amd(A, meta)`
-computes the approximate minimum degree ordering of `A + A'`. The ordering is
+computes the approximate minimum degree ordering of `A + Aᵀ`. The ordering is
 represented as a permutation vector `p`. Factorizations of `A[p,p]` tend to
 be sparser than those of `A`.
 
-The matrix `A` must be square and the sparsity pattern of `A + A'` is implicit.
+The matrix `A` must be square and the sparsity pattern of `A + Aᵀ` is implicit.
 Thus it is convenient to represent symmetric matrices using one triangle only.
 The diagonal of `A` may be present but will be ignored.
 
