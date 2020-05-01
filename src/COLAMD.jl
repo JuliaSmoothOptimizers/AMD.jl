@@ -131,10 +131,11 @@ for (fn, typ) in ((:_symamd, Cint), (:_symamd_l, _Clong))
       rowval = A.rowval .- $typ(1)
       p = zeros($typ, nrow+1) # p is used as a workspace during the ordering, which is why it must be of length n+1, not just n
       valid = ccall($fn, $typ,
-                    ($typ, Ref{$typ}, Ref{$typ}, Ptr{$typ}, Ptr{Cdouble}, Ptr{Cvoid}                                   , Cvoid),
-                     nrow, rowval   , colptr   , p        , meta.knobs  , @cfunction(calloc, Ptr{Cvoid}, ($typ, $typ)) , @cfunction(free, Cvoid, (Ptr{Cvoid},)))
+                    ($typ, Ref{$typ}, Ref{$typ}, Ptr{$typ}, Ptr{Cdouble}, Ptr{$typ} , Ptr{Cvoid}                                   , Ptr{Cvoid}),
+                     nrow, rowval   , colptr   , p        , meta.knobs  , meta.stats, @cfunction(calloc, Ptr{Cvoid}, ($typ, $typ)) , @cfunction(free, Cvoid, (Ptr{Cvoid},)))
       Bool(valid) || throw("symamd status: $(colamd_statuses[meta.stats[COLAMD_STATUS]])")
       pop!(p)
+      p .+= 1  # 1-based indexing
       return p
     end
 
