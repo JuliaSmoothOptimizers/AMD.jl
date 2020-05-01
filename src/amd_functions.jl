@@ -16,10 +16,8 @@ function __init__()
   global _colamd_set_defaults = Libdl.dlsym(_libcolamd, "colamd_set_defaults")
   global _colamd_recommended = Libdl.dlsym(_libcolamd, "colamd_recommended")
   global _colamd = Libdl.dlsym(_libcolamd, "colamd")
-  global _symamd = Libdl.dlsym(_libcolamd, "symamd")
 
   global _colamd_l_set_defaults = Libdl.dlsym(_libcolamd, "colamd_l_set_defaults")
   global _colamd_l_recommended = Libdl.dlsym(_libcolamd, "colamd_l_recommended")
   global _colamd_l = Libdl.dlsym(_libcolamd, "colamd_l")
-  global _symamd_l = Libdl.dlsym(_libcolamd, "symamd_l")
 end
