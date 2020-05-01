@@ -1,13 +1,4 @@
 export Colamd, colamd
-export COLAMD_DENSE_ROW, COLAMD_DENSE_COL, COLAMD_AGGRESSIVE,
-       COLAMD_DEFRAG_COUNT, COLAMD_STATUS, COLAMD_INFO1,
-       COLAMD_INFO2, COLAMD_INFO3
-export COLAMD_OK, COLAMD_OK_BUT_JUMBLED, COLAMD_ERROR_A_not_present,
-       COLAMD_ERROR_p_not_present, COLAMD_ERROR_nrow_negative,
-       COLAMD_ERROR_ncol_negative, COLAMD_ERROR_nnz_negative,
-       COLAMD_ERROR_p0_nonzero, COLAMD_ERROR_A_too_small,
-       COLAMD_ERROR_col_length_negative, COLAMD_ERROR_row_index_out_of_bounds,
-       COLAMD_ERROR_out_of_memory, COLAMD_ERROR_internal_error
 
 const COLAMD_KNOBS = 20  # size of the knobs array
 const COLAMD_STATS = 20  # size of the stats array

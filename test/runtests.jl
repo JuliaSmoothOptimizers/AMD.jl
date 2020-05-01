@@ -13,7 +13,7 @@ for n in [10, 20, 30]
 
       meta = Amd()
       p = amd(A, meta)
-      @test meta.info[AMD_STATUS] == AMD_OK
+      @test meta.info[1] == 0
       @test minimum(p) == 1
       @test maximum(p) == n
 
@@ -43,7 +43,7 @@ for n in [10, 20, 30]
 
         meta = Colamd{T}()
         p = colamd(A, meta)
-        @test meta.stats[COLAMD_STATUS] == COLAMD_OK
+        @test meta.stats[4] == 0
         @test minimum(p) == 1
         @test maximum(p) == m
         q = colamd(A)

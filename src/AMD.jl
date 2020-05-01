@@ -11,12 +11,6 @@ include("amd_functions.jl")
 include("COLAMD.jl")
 
 export Amd, amd_valid, amd
-export AMD_DENSE, AMD_AGGRESSIVE
-export AMD_STATUS, AMD_N, AMD_NZ, AMD_SYMMETRY, AMD_NZDIAG,
-       AMD_NZ_A_PLUS_AT, AMD_NDENSE, AMD_MEMORY, AMD_NCMPA,
-       AMD_LNZ, AMD_NDIV, AMD_NMULTSUBS_LDL, AMD_NMULTSUBS_LU,
-       AMD_DMAX
-export AMD_OK, AMD_OUT_OF_MEMORY, AMD_INVALID, AMD_OK_BUT_JUMBLED
 
 const AMD_CONTROL = 5  # size of control array
 const AMD_INFO = 20    # size of info array
