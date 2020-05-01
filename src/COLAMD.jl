@@ -37,8 +37,8 @@ const COLAMD_ERROR_row_index_out_of_bounds = -9
 const COLAMD_ERROR_out_of_memory = -10
 const COLAMD_ERROR_internal_error = -999
 
-const colamd_statuses = Dict(COLAMD_OK => "OK",
-                             COLAMD_OK_BUT_JUMBLED => "OK, but columns of input matrix were jumbled (unsorted columns or duplicate entries)",
+const colamd_statuses = Dict(COLAMD_OK => "ok",
+                             COLAMD_OK_BUT_JUMBLED => "ok, but columns of input matrix were jumbled (unsorted columns or duplicate entries)",
                              COLAMD_ERROR_A_not_present => "rowval is a null pointer",
                              COLAMD_ERROR_p_not_present => "colptr is a null pointer",
                              COLAMD_ERROR_nrow_negative => "nrow is negative",

@@ -31,7 +31,7 @@ const AMD_N = 2               # size of A
 const AMD_NZ = 3              # number of nonzeros in A
 const AMD_SYMMETRY = 4        # pattern symmetry (1 = symmetric, 0 = unsymmetric)
 const AMD_NZDIAG = 5          # number of entries on diagonal
-const AMD_NZ_A_PLUS_AT = 6    # number of nonzeros in A+A'
+const AMD_NZ_A_PLUS_AT = 6    # number of nonzeros in A+Aᵀ
 const AMD_NDENSE = 7          # number of "dense" rows or cols in A
 const AMD_MEMORY = 8          # amount of memory used by AMD
 const AMD_NCMPA = 9           # number of garbage collections in AMD
@@ -145,7 +145,7 @@ for (orderfn, typ) in ((:_amd_order, Cint), (:_amd_l_order, _Clong))
       valid = ccall($orderfn, $typ,
                     ($typ, Ref{$typ}, Ref{$typ}, Ptr{$typ}, Ptr{Cdouble}, Ptr{Cdouble}),
                      nrow, colptr,    rowval,    p,         meta.control, meta.info)
-      (valid == AMD_OK || valid == AMD_OK_BUT_JUMBLED) || throw("amd returns: $(amd_statuses[valid])")
+      (valid == AMD_OK || valid == AMD_OK_BUT_JUMBLED) || throw("amd_order returns: $(amd_statuses[valid])")
       p .+= 1
       return p
     end
