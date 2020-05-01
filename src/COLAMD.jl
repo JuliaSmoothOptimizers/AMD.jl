@@ -1,4 +1,4 @@
-export Colamd, colamd
+export Colamd, colamd, symamd
 
 const COLAMD_KNOBS = 20  # size of the knobs array
 const COLAMD_STATS = 20  # size of the stats array
@@ -120,3 +120,45 @@ colamd computes a permutation vector `p` such that the Cholesky factorization of
   `A[:,p]' * A[:,p]` has less fill-in and requires fewer floating point operations than `AᵀA`.
 """
 colamd
+
+for (fn, typ) in ((:_symamd, Cint), (:_symamd_l, _Clong))
+
+  @eval begin
+
+    function symamd(A::SparseMatrixCSC{F,$typ}, meta::Colamd{$typ}) where F
+      nrow, ncol = size(A)
+      colptr = A.colptr .- $typ(1)  # 0-based indexing
+      rowval = A.rowval .- $typ(1)
+      p = zeros($typ, nrow+1) # p is used as a workspace during the ordering, which is why it must be of length n+1, not just n
+      valid = ccall($fn, $typ,
+                    ($typ, Ref{$typ}, Ref{$typ}, Ptr{$typ}, Ptr{Cdouble}, Ptr{Cvoid}                                   , Cvoid),
+                     nrow, rowval   , colptr   , p        , meta.knobs  , @cfunction(calloc, Ptr{Cvoid}, ($typ, $typ)) , @cfunction(free, Cvoid, (Ptr{Cvoid},)))
+      Bool(valid) || throw("symamd status: $(colamd_statuses[meta.stats[COLAMD_STATUS]])")
+      pop!(p)
+      return p
+    end
+
+    symamd(A :: Symmetric{F,SparseMatrixCSC{F,$typ}}, meta::Colamd{$typ}) where F = symamd(A.data, meta)
+
+  end
+end
+
+function symamd(A :: SparseMatrixCSC{F,T}) where {F,T<:Union{Cint,_Clong}}
+  meta = Colamd{T}()
+  symamd(A, meta)
+end
+
+@inline symamd(A :: Symmetric{F,SparseMatrixCSC{F,T}}) where {F,T<:Union{Cint,_Clong}} = symamd(A.data)
+
+"""
+    symamd(A, meta)
+
+or
+
+    symamd(A)
+
+Symamd computes a permutation vector of a symmetric matrix A such that the
+Cholesky factorization of `A[p,p]` has less fill-in and requires fewer
+floating point operations than A.
+"""
+symamd

@@ -6,29 +6,47 @@
 [![codecov.io](https://codecov.io/github/JuliaSmoothOptimizers/AMD.jl/coverage.svg?branch=master)](https://codecov.io/github/JuliaSmoothOptimizers/AMD.jl?branch=master)
 
 Given a square sparse matrix, compute an approximate minimum degree ordering.
-This package is an interface to the AMD library of Amestoy, Davis and Duff.
+This package is an interface to the AMD library (Amestoy, Davis and Duff) and COLAMD library (Liromore, Davis, Gilberg an Ng).
 
 ### Installing
 
-```JULIA
-Pkg.add("AMD")
-Pkg.test("AMD")
+```julia
+julia> ]
+pkg> add AMD
+pkg> test AMD
 ```
 
-### Example
+### Algorithms
+
+**amd**: an approximate minimum degree ordering algorithm
+for Cholesky or LU factorizations of sparse matrices.
+
+**symamd**: an approximate minimum degree ordering algorithm
+for Cholesky factorization of symmetric matrices.
+
+**colamd**: an approximate minimum degree column ordering algorithm,
+for LU factorization of symmetric or unsymmetric matrices,
+QR factorization, least squares, interior point methods for
+linear programming problems, and other related problems.
+
+### Examples
 
 In the simplest case:
 
-```JULIA
-julia> using AMD
-julia> A = sprand(10, 10, .5);
-julia> p = amd(A);
+```julia
+using AMD
+A = sprand(10, 10, .5)
+p_amd = amd(A)
+p_symamd = symamd(A)
+p_colamd = colamd(A)
 ```
+
+THe **spy** function of [UnicodePlots.jl](https://github.com/Evizero/UnicodePlots.jl.git) allows to easily visualize the structure of `A`, `A[p,p]` and `A[:,p]`.
 
 If statistics on the permutation are of interest and/or for changing the
 default control parameters:
 
-```JULIA
+```julia
 julia> meta = Amd{Clong}();  # because A's index type is Int64 on my platform
 julia> # optionally change meta.control: ?Amd
 julia> p = amd(A, meta)
@@ -53,10 +71,7 @@ Info:
   max nonzeros in any column of factor: 8.0
 ```
 
-AMD computes a fill-reducing permutation based on the sparsity pattern of A +
-Aᵀ. The input pattern can be anything: diagonal entries will be ignored and the
-rest will be used to implicitly work on the pattern of A + Aᵀ. Thus if A is
-symmetric, it is sufficient to supply the strict lower or upper triangle only.
+**amd** algorithm computes a fill-reducing permutation based on the sparsity pattern of A + Aᵀ. The input pattern can be anything: diagonal entries will be ignored and the rest will be used to implicitly work on the pattern of A + Aᵀ. Thus if A is symmetric, it is sufficient to supply the strict lower or upper triangle only.
 
 ### References
 
@@ -68,3 +83,6 @@ symmetric, it is sufficient to supply the strict lower or upper triangle only.
    minimum degree ordering algorithm. *ACM Transactions on Mathematical
    Software*, 30(3), pp. 381&ndash;388, 2004.
    Doi [10.1145/1024074.1024081](http://dx.doi.org/10.1145/1024074.1024081)
+3. T. A. Davis, J. R. Gilbert, S. Larimore, E. Ng. Algorithm 836: COLAMD,
+  an approximate column minimum degree ordering algorithm, *ACM
+  Transactions on Mathematical Software*, 30(3), pp. 377&ndash;380, 2004.
