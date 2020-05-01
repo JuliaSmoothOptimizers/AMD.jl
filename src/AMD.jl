@@ -112,8 +112,8 @@ for (validfn, typ) in ((:_amd_valid, Cint), (:_amd_l_valid, _Clong))
 
     function amd_valid(A :: SparseMatrixCSC{F,$typ}) where F
       nrow, ncol = size(A)
-      colptr = A.colptr .- $typ(1)  # 0-based indexing
-      rowval = A.rowval .- $typ(1)
+      colptr = A.colptr .- 1  # 0-based indexing
+      rowval = A.rowval .- 1
       valid = ccall($validfn, $typ,
                     ($typ, $typ, Ptr{$typ}, Ptr{$typ}), nrow, ncol, colptr, rowval)
       return valid == AMD_OK || valid == AMD_OK_BUT_JUMBLED
@@ -132,8 +132,8 @@ for (orderfn, typ) in ((:_amd_order, Cint), (:_amd_l_order, _Clong))
     function amd(A::SparseMatrixCSC{F,$typ}, meta::Amd) where F
       nrow, ncol = size(A)
       nrow == ncol || error("AMD: input matrix must be square")
-      colptr = A.colptr .- $typ(1)  # 0-based indexing
-      rowval = A.rowval .- $typ(1)
+      colptr = A.colptr .- 1  # 0-based indexing
+      rowval = A.rowval .- 1
 
       p = zeros($typ, nrow)
       valid = ccall($orderfn, $typ,

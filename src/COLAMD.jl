@@ -84,10 +84,10 @@ for (orderfn, typ) in ((:_colamd, Cint), (:_colamd_l, _Clong))
     function colamd(A::SparseMatrixCSC{F,$typ}, meta::Colamd{$typ}) where F
       nrow, ncol = size(A)
       nnz = A.colptr[end] - 1
-      p = A.colptr .- $typ(1)  # 0-based indexing
+      p = A.colptr .- 1  # 0-based indexing
       len = colamd_recommended($typ(nnz), $typ(nrow), $typ(ncol))
       workspace = zeros($typ, len)
-      workspace[1:length(A.rowval)] .= A.rowval .- $typ(1)
+      workspace[1:length(A.rowval)] .= A.rowval .- 1
       valid = ccall($orderfn, $typ,
                     ($typ, $typ, $typ, $Ptr{$typ}, Ptr{$typ}, Ptr{Cdouble}, Ptr{$typ}),
                      nrow, ncol, len , workspace , p        , meta.knobs  , meta.stats)
@@ -127,8 +127,8 @@ for (fn, typ) in ((:_symamd, Cint), (:_symamd_l, _Clong))
 
     function symamd(A::SparseMatrixCSC{F,$typ}, meta::Colamd{$typ}) where F
       nrow, ncol = size(A)
-      colptr = A.colptr .- $typ(1)  # 0-based indexing
-      rowval = A.rowval .- $typ(1)
+      colptr = A.colptr .- 1  # 0-based indexing
+      rowval = A.rowval .- 1
       p = zeros($typ, nrow+1) # p is used as a workspace during the ordering, which is why it must be of length n+1, not just n
       valid = ccall($fn, $typ,
                     ($typ, Ref{$typ}, Ref{$typ}, Ptr{$typ}, Ptr{Cdouble}, Ptr{$typ} , Ptr{Cvoid}                                   , Ptr{Cvoid}),
@@ -158,8 +158,8 @@ or
 
     symamd(A)
 
-Symamd computes a permutation vector of a symmetric matrix A such that the
-Cholesky factorization of `A[p,p]` has less fill-in and requires fewer
-floating point operations than A.
+Given a symmetric matrix `A`, symamd computes a permutation vector `p`
+such that the Cholesky factorization of `A[p,p]` has less fill-in and
+requires fewer floating point operations than that of A.
 """
 symamd

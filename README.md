@@ -71,18 +71,19 @@ Info:
   max nonzeros in any column of factor: 8.0
 ```
 
-**amd** algorithm computes a fill-reducing permutation based on the sparsity pattern of A + Aᵀ. The input pattern can be anything: diagonal entries will be ignored and the rest will be used to implicitly work on the pattern of A + Aᵀ. Thus if A is symmetric, it is sufficient to supply the strict lower or upper triangle only.
+The **amd** algorithm computes a fill-reducing permutation based on the sparsity pattern of A + Aᵀ. The input pattern can be anything: diagonal entries will be ignored and the rest will be used to implicitly work on the pattern of A + Aᵀ. Thus if A is symmetric, it is sufficient to supply the strict lower or upper triangle only.
 
 ### References
 
 1. P. R. Amestoy, T. A. Davis and I. S. Duff. An Approximate Minimum Degree
    Ordering Algorithm. *SIAM Journal on Matrix Analysis and Applications*, 17(4),
    pp. 886&ndash;905, 1996.
-   Doi [10.1137/S0895479894278952](http://dx.doi.org/10.1137/S0895479894278952)
+   DOI [10.1137/S0895479894278952](https://doi.org/10.1137/S0895479894278952)
 2. P. R. Amestoy, T. A. Davis, and I. S. Duff. Algorithm 837: An approximate
    minimum degree ordering algorithm. *ACM Transactions on Mathematical
    Software*, 30(3), pp. 381&ndash;388, 2004.
-   Doi [10.1145/1024074.1024081](http://dx.doi.org/10.1145/1024074.1024081)
+   DOI [10.1145/1024074.1024081](https://doi.org/10.1145/1024074.1024081)
 3. T. A. Davis, J. R. Gilbert, S. Larimore, E. Ng. Algorithm 836: COLAMD,
   an approximate column minimum degree ordering algorithm, *ACM
   Transactions on Mathematical Software*, 30(3), pp. 377&ndash;380, 2004.
+  DOI [10.1145/1024074.1024080](https://doi.org/10.1145/1024074.1024080)
