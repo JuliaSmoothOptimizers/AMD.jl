@@ -1,4 +1,4 @@
-export Colamd, colamd
+export Colamd, colamd, symamd
 
 const COLAMD_KNOBS = 20  # size of the knobs array
 const COLAMD_STATS = 20  # size of the stats array
@@ -89,11 +89,11 @@ for (orderfn, typ) in ((:_colamd, Cint), (:_colamd_l, _Clong))
       workspace = zeros($typ, len)
       workspace[1:length(A.rowval)] .= A.rowval .- $typ(1)
       valid = ccall($orderfn, $typ,
-                    ($typ, $typ, $typ, $Ptr{$typ}, Ptr{$typ}, Ptr{Cdouble}, Ptr{$typ}),
-                     nrow, ncol, len , workspace , p        , meta.knobs  , meta.stats)
+                    ($typ, $typ, $typ, $Ptr{$typ}, Ptr{$typ}, Ptr{Cdouble},  Ptr{$typ}),
+                     nrow, ncol,  len,  workspace,         p,   meta.knobs, meta.stats)
       Bool(valid) || throw("colamd status: $(colamd_statuses[meta.stats[COLAMD_STATUS]])")
       pop!(p)  # remove the number of nnz
-      p .+= 1  # 1-based indexing
+      p .+= $typ(1)  # 1-based indexing
       return p
     end
 
@@ -120,3 +120,46 @@ colamd computes a permutation vector `p` such that the Cholesky factorization of
   `A[:,p]' * A[:,p]` has less fill-in and requires fewer floating point operations than `AᵀA`.
 """
 colamd
+
+for (fn, typ) in ((:_symamd, Cint), (:_symamd_l, _Clong))
+
+  @eval begin
+
+    function symamd(A::SparseMatrixCSC{F,$typ}, meta::Colamd{$typ}) where F
+      nrow, ncol = size(A)
+      colptr = A.colptr .- $typ(1)  # 0-based indexing
+      rowval = A.rowval .- $typ(1)
+      p = zeros($typ, nrow+1) # p is used as a workspace during the ordering, which is why it must be of length n+1, not just n
+      valid = ccall($fn, $typ,
+                    ($typ, Ref{$typ}, Ref{$typ}, Ptr{$typ}, Ptr{Cdouble},  Ptr{$typ},                                   Ptr{Cvoid},                           Ptr{Cvoid}),
+                     nrow,    rowval,    colptr,         p,   meta.knobs, meta.stats, @cfunction(calloc, Ptr{Cvoid}, ($typ, $typ)), @cfunction(free, Cvoid, (Ptr{Cvoid},)))
+      Bool(valid) || throw("symamd status: $(colamd_statuses[meta.stats[COLAMD_STATUS]])")
+      pop!(p)
+      p .+= $typ(1)  # 1-based indexing
+      return p
+    end
+
+    symamd(A :: Symmetric{F,SparseMatrixCSC{F,$typ}}, meta::Colamd{$typ}) where F = symamd(A.data, meta)
+
+  end
+end
+
+function symamd(A :: SparseMatrixCSC{F,T}) where {F,T<:Union{Cint,_Clong}}
+  meta = Colamd{T}()
+  symamd(A, meta)
+end
+
+@inline symamd(A :: Symmetric{F,SparseMatrixCSC{F,T}}) where {F,T<:Union{Cint,_Clong}} = symamd(A.data)
+
+"""
+    symamd(A, meta)
+
+or
+
+    symamd(A)
+
+Given a symmetric matrix `A`, symamd computes a permutation vector `p`
+such that the Cholesky factorization of `A[p,p]` has less fill-in and
+requires fewer floating point operations than that of A.
+"""
+symamd

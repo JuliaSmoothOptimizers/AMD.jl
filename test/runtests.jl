@@ -49,6 +49,18 @@ for n in [10, 20, 30]
         @test maximum(p) == m
         q = colamd(A)
         @test all(p .== q)
+
+        if n == m
+          A = A * A'
+          meta = Colamd{T}()
+          p = symamd(A, meta)
+          @test meta.stats[COLAMD_STATUS] == COLAMD_OK
+          @test minimum(p) == 1
+          @test maximum(p) == m
+
+          q = symamd(A)
+          @test all(p .== q)
+        end
       end
     end
   end
