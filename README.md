@@ -18,16 +18,11 @@ pkg> test AMD
 
 ### Algorithms
 
-**amd**: an approximate minimum degree ordering algorithm
-for Cholesky or LU factorizations of sparse matrices.
+**amd**: an approximate minimum degree ordering algorithm for the sparse factorization of square matrices.
 
-**symamd**: an approximate minimum degree ordering algorithm
-for Cholesky factorization of symmetric matrices.
+**symamd**: an approximate minimum degree ordering algorithm for the sparse factorization of symmetric matrices.
 
-**colamd**: an approximate minimum degree column ordering algorithm,
-for LU factorization of symmetric or unsymmetric matrices,
-QR factorization, least squares, interior point methods for
-linear programming problems, and other related problems.
+**colamd**: an approximate minimum degree column ordering algorithm for the sparse factorization of arbitrary, square or rectangular, matrices.
 
 ### Examples
 
@@ -40,8 +35,6 @@ p_amd = amd(A)
 p_symamd = symamd(A)
 p_colamd = colamd(A)
 ```
-
-THe **spy** function of [UnicodePlots.jl](https://github.com/Evizero/UnicodePlots.jl.git) allows to easily visualize the structure of `A`, `A[p,p]` and `A[:,p]`.
 
 If statistics on the permutation are of interest and/or for changing the
 default control parameters:
