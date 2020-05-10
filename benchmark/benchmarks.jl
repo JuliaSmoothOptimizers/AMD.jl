@@ -1,15 +1,22 @@
-using MatrixMarket, DelimitedFiles
-using LinearAlgebra, SparseArrays
-using LDLFactorizations, AMD, Metis
-using Printf, DataFrames, SolverBenchmark
+using DelimitedFiles, LinearAlgebra, Printf, SparseArrays
+using Pkg.Artifacts
 
-# download from https://github.com/optimizers/sqd-collection
-# run(`git clone https://github.com/optimizers/sqd-collection.git`)
+using DataFrames, MatrixMarket, Metis
 
-markdown_benchmarks = true
-latex_benchmarks    = true
+using AMD, LDLFactorizations, SolverBenchmark
 
-const sqd_path = joinpath(dirname(pathof(AMD)), "..", "benchmark", "sqd-collection")
+# this will soon be in LDLFactorizations
+import SparseArrays.nnz
+nnz(ldlt::LDLFactorizations.LDLFactorization) = SparseArrays.nnz(ldlt.L) + length(ldlt.D)
+
+latex_benchmarks    = false
+
+# obtain path to SQD collection
+const artifact_toml = joinpath(@__DIR__, "Artifacts.toml")
+const sqd_hash = artifact_hash("sqdcollection", artifact_toml)
+@assert artifact_exists(sqd_hash)
+const sqd_path = joinpath(artifact_path(sqd_hash), "sqd-collection-0.1")
+
 subdirs = readdir(sqd_path)
 const formulations = ("2x2", "3x3")
 
@@ -19,9 +26,6 @@ ratio_symamd  = Float64[]
 ratio_metis   = Float64[]
 ratio_classic = Float64[]
 nnz_sqd       = Int[]
-
-import SparseArrays.nnz
-nnz(ldlt::LDLFactorizations.LDLFactorization) = SparseArrays.nnz(ldlt.L) + length(ldlt.D)
 
 for subdir ∈ subdirs
   subdir == ".git" && continue
@@ -38,10 +42,10 @@ for subdir ∈ subdirs
       push!(names_sqd, name)
       println(name)
 
-      p_amd     = amd(A)
-      p_metis   = Int.(Metis.permutation(A)[1])
-      p_symamd  = symamd(A)
-      p_classic = collect(1:size(A,1))
+      p_amd      = amd(A)
+      p_metis, _ = Metis.permutation(A)
+      p_symamd   = symamd(A)
+      p_classic  = collect(1:size(A,1))
 
       ldlt_amd     = ldl(A, p_amd)
       ldlt_symamd  = ldl(A, p_symamd)
@@ -59,7 +63,7 @@ end
 
 orderings = [:NO_ORDERING, :AMD, :SYMAMD, :METIS]
 n = length(names_sqd)
-stats = Dict(ordering => 
+stats = Dict(ordering =>
           DataFrame(
             :id     => 1:n,
             :name   => [@sprintf("%15s", names_sqd[i]) for i = 1:n],
@@ -69,10 +73,8 @@ stats = Dict(ordering =>
 
 df = join(stats, [:ratio], invariant_cols=[:name, :nnz])
 
-if markdown_benchmarks
-  open("benchmarks.md", "w") do io
-    markdown_table(io, df)
-  end
+open("benchmarks.md", "w") do io
+  markdown_table(io, df)
 end
 
 if latex_benchmarks
@@ -84,3 +86,4 @@ if latex_benchmarks
     println(io, "\\end{document}")
   end
 end
+
