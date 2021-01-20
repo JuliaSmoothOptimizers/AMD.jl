@@ -12,7 +12,6 @@ SUITE["amd"] = BenchmarkGroup()
 SUITE["symamd"] = BenchmarkGroup()
 SUITE["metis"] = BenchmarkGroup()
 SUITE["symrcm"] = BenchmarkGroup()
-SUITE["nnz"] = BenchmarkGroup()
 
 latex_benchmarks = false
 
@@ -45,10 +44,10 @@ for subdir ∈ subdirs
     b = readdlm(joinpath(iterpath, "rhs_0.rhs"), Float64)[:]
     nnz_A = nnz(tril(A, -1))
     n = size(A,1)
-    if size(A, 1) ≤ 25000
+    if n ≤ 25000
       name = "$(subdir)_$(formulation)"
       push!(names_sqd, name)
-      
+
       p_amd      = amd(A)
       p_symamd   = symamd(A)
       p_metis, _ = Metis.permutation(A)
@@ -61,21 +60,19 @@ for subdir ∈ subdirs
       # ldlt_metis   = ldl(A, p_metis)
       # ldlt_symrcm  = ldl(A, p_symrcm)
       # ldlt_classic = ldl(A, p_classic)
-      
+
       # push!(nnz_sqd, nnz_A)
       # push!(ratio_amd, nnz(ldlt_amd) / nnz_A)
       # push!(ratio_symamd, nnz(ldlt_symamd) / nnz_A)
       # push!(ratio_metis, nnz(ldlt_metis) / nnz_A)
       # push!(ratio_symrcm, nnz(ldlt_symrcm) / nnz_A)
       # push!(ratio_classic, nnz(ldlt_classic) / nnz_A)
-      
+
       SUITE["no_ordering"][name] = @benchmarkable nnz(ldl($A, $p_classic).L)/$nnz_A
       SUITE["amd"][name] =  @benchmarkable nnz(ldl($A, $p_amd).L)/$nnz_A
       SUITE["symamd"][name] = @benchmarkable nnz(ldl($A, $p_symamd).L)/$nnz_A
       SUITE["metis"][name] = @benchmarkable nnz(ldl($A, $p_metis).L)/$nnz_A
       SUITE["symrcm"][name] = @benchmarkable nnz(ldl($A, $p_symrcm).L)/$nnz_A
-      SUITE["nnz"][name] = @benchmarkable nnz(tril($A, -1))
-      
     end
   end
 end
