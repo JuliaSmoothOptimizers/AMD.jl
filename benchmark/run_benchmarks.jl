@@ -2,7 +2,7 @@ using Pkg
 bmark_dir = @__DIR__
 Pkg.activate(bmark_dir)
 Pkg.instantiate()
-bmarkname = "amd"
+bmarkname = "AMD"
 using Git
 
 # if we are running these benchmarks from the git repository
@@ -48,7 +48,7 @@ for k ∈ keys(judgement_stats)
   global file_num
   k_stats = Dict{Symbol,DataFrame}(:commit => commit_stats[k],
                                    :master => master_stats[k])
-  save_stats(k_stats, "ldl_$(bmarkname)_vs_master_$(k).jld2", force=true)
+  save_stats(k_stats, "AMD_$(bmarkname)_vs_master_$(k).jld2", force=true)
 
   k_profile = profile_solvers_from_pkgbmark(k_stats)
   savefig("profiles_commit_vs_master_$(k).svg")
@@ -67,12 +67,12 @@ for mdfile ∈ [:judgement, :master, :commit]
   file_num += 1
 end
 
-jldopen("ldl_$(bmarkname)_vs_master_judgement.jld2", "w") do file
+jldopen("AMD_$(bmarkname)_vs_master_judgement.jld2", "w") do file
   file["jstats"] = judgement_stats
 end
 
 # json description of gist
-json_dict = Dict{String,Any}("description" => "LDLFactorization repository benchmark",
+json_dict = Dict{String,Any}("description" => "AMD repository benchmark",
                              "public" => true,
                              "files" => files_dict)
 
