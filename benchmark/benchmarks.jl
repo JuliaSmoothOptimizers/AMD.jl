@@ -23,13 +23,13 @@ const sqd_path = joinpath(artifact_path(sqd_hash), "sqd-collection-0.1")
 subdirs = readdir(sqd_path)
 const formulations = ["2x2", "3x3"]
 
-names_sqd     = String[]
-ratio_amd     = Float64[]
-ratio_symamd  = Float64[]
-ratio_metis   = Float64[]
-ratio_symrcm  = Float64[]
+names_sqd = String[]
+ratio_amd = Float64[]
+ratio_symamd = Float64[]
+ratio_metis = Float64[]
+ratio_symrcm = Float64[]
 ratio_classic = Float64[]
-nnz_sqd       = Int[]
+nnz_sqd = Int[]
 
 for subdir ∈ subdirs
   subdir == ".git" && continue
@@ -41,23 +41,23 @@ for subdir ∈ subdirs
     A = MatrixMarket.mmread(joinpath(iterpath, "K_0.mtx"))
     b = readdlm(joinpath(iterpath, "rhs_0.rhs"), Float64)[:]
     nnz_A = nnz(tril(A, -1))
-    n = size(A,1)
+    n = size(A, 1)
     if n ≤ 25000
       name = "$(subdir)_$(formulation)"
       push!(names_sqd, name)
 
-      p_amd      = amd(A)
-      p_symamd   = symamd(A)
+      p_amd = amd(A)
+      p_symamd = symamd(A)
       p_metis, _ = Metis.permutation(A)
-      p_symrcm   = symrcm(A)
-      p_classic  = collect(1:n)
+      p_symrcm = symrcm(A)
+      p_classic = collect(1:n)
       println(name)
-      
-      SUITE["no_ordering"][name] = @benchmarkable nnz(ldl($A, $p_classic).L)/$nnz_A
-      SUITE["amd"][name] =  @benchmarkable nnz(ldl($A, $p_amd).L)/$nnz_A
-      SUITE["symamd"][name] = @benchmarkable nnz(ldl($A, $p_symamd).L)/$nnz_A
-      SUITE["metis"][name] = @benchmarkable nnz(ldl($A, $p_metis).L)/$nnz_A
-      SUITE["symrcm"][name] = @benchmarkable nnz(ldl($A, $p_symrcm).L)/$nnz_A
+
+      SUITE["no_ordering"][name] = @benchmarkable nnz(ldl($A, $p_classic).L) / $nnz_A
+      SUITE["amd"][name] = @benchmarkable nnz(ldl($A, $p_amd).L) / $nnz_A
+      SUITE["symamd"][name] = @benchmarkable nnz(ldl($A, $p_symamd).L) / $nnz_A
+      SUITE["metis"][name] = @benchmarkable nnz(ldl($A, $p_metis).L) / $nnz_A
+      SUITE["symrcm"][name] = @benchmarkable nnz(ldl($A, $p_symrcm).L) / $nnz_A
     end
   end
 end
