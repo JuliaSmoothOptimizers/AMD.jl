@@ -41,11 +41,12 @@ const AMD_OUT_OF_MEMORY = -1  # malloc failed or problem too large
 const AMD_INVALID = -2        # input arguments not valid
 const AMD_OK_BUT_JUMBLED = 1  # input ok but AMD will need to perform extra work
 
-const amd_statuses = Dict(AMD_OK => "ok",
-                          AMD_OUT_OF_MEMORY => "out of memory",
-                          AMD_INVALID => "input invalid",
-                          AMD_OK_BUT_JUMBLED => "ok but jumbled",
-                         )
+const amd_statuses = Dict(
+  AMD_OK => "ok",
+  AMD_OUT_OF_MEMORY => "out of memory",
+  AMD_INVALID => "input invalid",
+  AMD_OK_BUT_JUMBLED => "ok but jumbled",
+)
 
 """Base type to hold control and information related to a call to AMD.
 `control` is a vector of C doubles with components:
@@ -59,8 +60,8 @@ row will be treated as dense.
 `info` is a vector of C doubles that contains statistics on the ordering.
 """
 mutable struct Amd
-  control :: Vector{Cdouble}
-  info :: Vector{Cdouble}
+  control::Vector{Cdouble}
+  info::Vector{Cdouble}
 
   function Amd()
     control = zeros(Cdouble, AMD_CONTROL)
@@ -70,8 +71,8 @@ mutable struct Amd
   end
 end
 
-function show(io :: IO, meta :: Amd)
-  s  = "Control:\n"
+function show(io::IO, meta::Amd)
+  s = "Control:\n"
   s *= "  dense row parameter: $(meta.control[AMD_DENSE])\n"
   s *= "  aggressive absorption: $(meta.control[AMD_AGGRESSIVE])\n"
   s *= "Info:\n"
@@ -84,8 +85,8 @@ function show(io :: IO, meta :: Amd)
   print(io, s)
 end
 
-function print(io :: IO, meta :: Amd)
-  s  = "Control:\n"
+function print(io::IO, meta::Amd)
+  s = "Control:\n"
   s *= "  dense row parameter: $(meta.control[AMD_DENSE])\n"
   s *= "  aggressive absorption: $(meta.control[AMD_AGGRESSIVE])\n"
   s *= "Info:\n"
@@ -107,54 +108,56 @@ function print(io :: IO, meta :: Amd)
 end
 
 for (validfn, typ) in ((:_amd_valid, Cint), (:_amd_l_valid, _Clong))
-
   @eval begin
-
-    function amd_valid(A :: SparseMatrixCSC{F,$typ}) where F
+    function amd_valid(A::SparseMatrixCSC{F, $typ}) where {F}
       nrow, ncol = size(A)
       colptr = A.colptr .- $typ(1)  # 0-based indexing
       rowval = A.rowval .- $typ(1)
-      valid = ccall($validfn, $typ,
-                    ($typ, $typ, Ptr{$typ}, Ptr{$typ}), nrow, ncol, colptr, rowval)
+      valid = ccall($validfn, $typ, ($typ, $typ, Ptr{$typ}, Ptr{$typ}), nrow, ncol, colptr, rowval)
       return valid == AMD_OK || valid == AMD_OK_BUT_JUMBLED
     end
 
-    amd_valid(A :: Symmetric{F,SparseMatrixCSC{F,$typ}}) where F = amd_valid(A.data)
-
+    amd_valid(A::Symmetric{F, SparseMatrixCSC{F, $typ}}) where {F} = amd_valid(A.data)
   end
 end
 
-
 for (orderfn, typ) in ((:_amd_order, Cint), (:_amd_l_order, _Clong))
-
   @eval begin
-
-    function amd(A::SparseMatrixCSC{F,$typ}, meta::Amd) where F
+    function amd(A::SparseMatrixCSC{F, $typ}, meta::Amd) where {F}
       nrow, ncol = size(A)
       nrow == ncol || error("AMD: input matrix must be square")
       colptr = A.colptr .- $typ(1)  # 0-based indexing
       rowval = A.rowval .- $typ(1)
 
       p = zeros($typ, nrow)
-      valid = ccall($orderfn, $typ,
-                    ($typ, Ref{$typ}, Ref{$typ}, Ptr{$typ}, Ptr{Cdouble}, Ptr{Cdouble}),
-                     nrow, colptr,    rowval,    p,         meta.control, meta.info)
-      (valid == AMD_OK || valid == AMD_OK_BUT_JUMBLED) || throw("amd_order returns: $(amd_statuses[valid])")
+      valid = ccall(
+        $orderfn,
+        $typ,
+        ($typ, Ref{$typ}, Ref{$typ}, Ptr{$typ}, Ptr{Cdouble}, Ptr{Cdouble}),
+        nrow,
+        colptr,
+        rowval,
+        p,
+        meta.control,
+        meta.info,
+      )
+      (valid == AMD_OK || valid == AMD_OK_BUT_JUMBLED) ||
+        throw("amd_order returns: $(amd_statuses[valid])")
       p .+= 1
       return p
     end
 
-    amd(A :: Symmetric{F,SparseMatrixCSC{F,$typ}}, meta::Amd) where F = amd(A.data, meta)
-
+    amd(A::Symmetric{F, SparseMatrixCSC{F, $typ}}, meta::Amd) where {F} = amd(A.data, meta)
   end
 end
 
-function amd(A :: SparseMatrixCSC{F,T}) where {F,T<:Union{Cint,_Clong}}
+function amd(A::SparseMatrixCSC{F, T}) where {F, T <: Union{Cint, _Clong}}
   meta = Amd()
   amd(A, meta)
 end
 
-@inline amd(A :: Symmetric{F,SparseMatrixCSC{F,T}}) where {F,T<:Union{Cint,_Clong}} = amd(A.data)
+@inline amd(A::Symmetric{F, SparseMatrixCSC{F, T}}) where {F, T <: Union{Cint, _Clong}} =
+  amd(A.data)
 
 """
     amd(A, meta)

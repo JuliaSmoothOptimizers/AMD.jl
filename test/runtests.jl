@@ -7,9 +7,9 @@ import AMD: AMD_STATUS, AMD_OK, COLAMD_STATUS, COLAMD_OK
 
 _Clong = Base.Sys.WORD_SIZE == 32 ? Clong : Clonglong
 for n in [10, 20, 30]
-  for density in [.25, .75, 1.0]
+  for density in [0.25, 0.75, 1.0]
     for T in [Cint, _Clong]
-      A = convert(SparseMatrixCSC{Float64,T}, sprand(n, n, density))
+      A = convert(SparseMatrixCSC{Float64, T}, sprand(n, n, density))
       @test amd_valid(A)
 
       meta = Amd()
@@ -38,9 +38,9 @@ end
 
 for n in [10, 20, 30]
   for m in [10, 20, 30]
-    for density in [.25, .75, 1.0]
+    for density in [0.25, 0.75, 1.0]
       for T in [Cint, _Clong]
-        A = convert(SparseMatrixCSC{Float64,T}, sprand(n, m, density))
+        A = convert(SparseMatrixCSC{Float64, T}, sprand(n, m, density))
 
         meta = Colamd{T}()
         p = colamd(A, meta)
@@ -68,7 +68,7 @@ end
 
 # For coverage.
 meta = Amd()
-A = convert(SparseMatrixCSC{Float64,Cint}, sprand(10, 10, .5))
+A = convert(SparseMatrixCSC{Float64, Cint}, sprand(10, 10, 0.5))
 p = amd(A, meta)
 show(meta)
 print(meta)
