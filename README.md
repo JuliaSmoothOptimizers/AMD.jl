@@ -1,8 +1,8 @@
 # AMD
 
-[![CI](https://github.com/JuliaSmoothOptimizers/AMD.jl/workflows/CI/badge.svg?branch=master)](https://github.com/JuliaSmoothOptimizers/AMD.jl/actions)
+[![CI](https://github.com/JuliaSmoothOptimizers/AMD.jl/workflows/CI/badge.svg?branch=main)](https://github.com/JuliaSmoothOptimizers/AMD.jl/actions)
 [![Build Status](https://api.cirrus-ci.com/github/JuliaSmoothOptimizers/AMD.jl.svg)](https://cirrus-ci.com/github/JuliaSmoothOptimizers/AMD.jl)
-[![codecov.io](https://codecov.io/github/JuliaSmoothOptimizers/AMD.jl/coverage.svg?branch=master)](https://codecov.io/github/JuliaSmoothOptimizers/AMD.jl?branch=master)
+[![codecov.io](https://codecov.io/github/JuliaSmoothOptimizers/AMD.jl/coverage.svg?branch=main)](https://codecov.io/github/JuliaSmoothOptimizers/AMD.jl?branch=main)
 
 Given a square sparse matrix, compute an approximate minimum degree ordering.
 This package is an interface to the AMD library (Amestoy, Davis and Duff) and COLAMD library (Liromore, Davis, Gilberg an Ng).
