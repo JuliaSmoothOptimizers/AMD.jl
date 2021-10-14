@@ -17,6 +17,7 @@ for n in [10, 20, 30]
       @test meta.info[AMD_STATUS] == AMD_OK
       @test minimum(p) == 1
       @test maximum(p) == n
+      @test isperm(p)
 
       q = amd(A)
       @test all(p .== q)
@@ -24,6 +25,9 @@ for n in [10, 20, 30]
       # test that amd(A) with A unsymmetric is amd(A + A')
       A = A + A'
       pA = amd(A)
+      @test minimum(pA) == 1
+      @test maximum(pA) == n
+      @test isperm(pA)
 
       L = Symmetric(A, :L)
       pL = amd(L)
@@ -47,6 +51,7 @@ for n in [10, 20, 30]
         @test meta.stats[COLAMD_STATUS] == COLAMD_OK
         @test minimum(p) == 1
         @test maximum(p) == m
+        @test isperm(p)
         q = colamd(A)
         @test all(p .== q)
 
@@ -57,6 +62,7 @@ for n in [10, 20, 30]
           @test meta.stats[COLAMD_STATUS] == COLAMD_OK
           @test minimum(p) == 1
           @test maximum(p) == m
+          @test isperm(p)
 
           q = symamd(A)
           @test all(p .== q)
