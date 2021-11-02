@@ -1,5 +1,8 @@
 # AMD
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3783808.svg)](https://doi.org/10.5281/zenodo.3381898)
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://JuliaSmoothOptimizers.github.io/AMD.jl/stable)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://JuliaSmoothOptimizers.github.io/AMD.jl/dev)
 [![CI](https://github.com/JuliaSmoothOptimizers/AMD.jl/workflows/CI/badge.svg?branch=main)](https://github.com/JuliaSmoothOptimizers/AMD.jl/actions)
 [![Build Status](https://api.cirrus-ci.com/github/JuliaSmoothOptimizers/AMD.jl.svg)](https://cirrus-ci.com/github/JuliaSmoothOptimizers/AMD.jl)
 [![codecov.io](https://codecov.io/github/JuliaSmoothOptimizers/AMD.jl/coverage.svg?branch=main)](https://codecov.io/github/JuliaSmoothOptimizers/AMD.jl?branch=main)
