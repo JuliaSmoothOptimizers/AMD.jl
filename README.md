@@ -1,14 +1,28 @@
 # AMD
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3783808.svg)](https://doi.org/10.5281/zenodo.3381898)
-[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://JuliaSmoothOptimizers.github.io/AMD.jl/stable)
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://JuliaSmoothOptimizers.github.io/AMD.jl/dev)
-[![CI](https://github.com/JuliaSmoothOptimizers/AMD.jl/workflows/CI/badge.svg?branch=main)](https://github.com/JuliaSmoothOptimizers/AMD.jl/actions)
-[![Build Status](https://api.cirrus-ci.com/github/JuliaSmoothOptimizers/AMD.jl.svg)](https://cirrus-ci.com/github/JuliaSmoothOptimizers/AMD.jl)
-[![codecov.io](https://codecov.io/github/JuliaSmoothOptimizers/AMD.jl/coverage.svg?branch=main)](https://codecov.io/github/JuliaSmoothOptimizers/AMD.jl?branch=main)
-
 Given a square sparse matrix, compute an approximate minimum degree ordering.
 This package is an interface to the AMD library (Amestoy, Davis and Duff) and COLAMD library (Liromore, Davis, Gilberg an Ng).
+
+## How to Cite
+
+If you use AMD.jl in your work, please cite using the format given in [`CITATION.cff`](https://github.com/JuliaSmoothOptimizers/AMD.jl/blob/main/CITATION.cff).
+
+| **Documentation** | **Linux/macOS/Windows/FreeBSD** | **Coverage** | **DOI** |
+|:-----------------:|:----------------------------------------------:|:------------:|:-------:|
+| [![docs-stable][docs-stable-img]][docs-stable-url] [![docs-dev][docs-dev-img]][docs-dev-url] | [![build-gh][build-gh-img]][build-gh-url] [![build-cirrus][build-cirrus-img]][build-cirrus-url] | [![codecov][codecov-img]][codecov-url] | [![doi][doi-img]][doi-url] |
+
+[docs-stable-img]: https://img.shields.io/badge/docs-stable-blue.svg
+[docs-stable-url]: https://JuliaSmoothOptimizers.github.io/AMD.jl/stable
+[docs-dev-img]: https://img.shields.io/badge/docs-dev-purple.svg
+[docs-dev-url]: https://JuliaSmoothOptimizers.github.io/AMD.jl/dev
+[build-gh-img]: https://github.com/JuliaSmoothOptimizers/AMD.jl/workflows/CI/badge.svg?branch=main
+[build-gh-url]: https://github.com/JuliaSmoothOptimizers/AMD.jl/actions
+[build-cirrus-img]: https://img.shields.io/cirrus/github/JuliaSmoothOptimizers/AMD.jl?logo=Cirrus%20CI
+[build-cirrus-url]: https://cirrus-ci.com/github/JuliaSmoothOptimizers/AMD.jl
+[codecov-img]: https://codecov.io/gh/JuliaSmoothOptimizers/AMD.jl/branch/main/graph/badge.svg
+[codecov-url]: https://app.codecov.io/gh/JuliaSmoothOptimizers/AMD.jl
+[doi-img]: https://img.shields.io/badge/DOI-10.5281%2Fzenodo.3381898-blue.svg
+[doi-url]: https://doi.org/10.5281/zenodo.3381898
 
 ### Installing
 
