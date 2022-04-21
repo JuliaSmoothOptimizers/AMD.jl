@@ -28,22 +28,6 @@ for n in [10, 20, 30]
       @test minimum(pA) == 1
       @test maximum(pA) == n
       @test isperm(pA)
-
-      L = Symmetric(A, :L)
-      pL = amd(L)
-      @test all(pA .== pL)
-
-      U = Symmetric(A, :U)
-      pU = amd(U)
-      @test all(pA .== pU)
-
-      L = Hermitian(A, :L)
-      pL = amd(L)
-      @test all(pA .== pL)
-
-      U = Hermitian(A, :U)
-      pU = amd(U)
-      @test all(pA .== pU)
     end
   end
 end
@@ -75,6 +59,27 @@ for n in [10, 20, 30]
           q = symamd(A)
           @test all(p .== q)
         end
+      end
+    end
+  end
+end
+
+# Test Symmetric and Hermitian wrappers
+for ordering in (:amd, :symamd, :colamd)
+  for wrapper in (:Symmetric, :Hermitian)
+    for T in [Cint, _Clong]
+      @eval begin
+        A = convert(SparseMatrixCSC{Float64, $T}, rand(10, 10))
+        A = A * A'
+        p = $ordering(A)
+
+        L = $wrapper(A, :L)
+        pL = $ordering(L)
+        @test all(p .== pL)
+
+        U = $wrapper(A, :U)
+        pU = $ordering(U)
+        @test all(p .== pU)
       end
     end
   end
