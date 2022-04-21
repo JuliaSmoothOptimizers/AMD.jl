@@ -118,6 +118,7 @@ for (validfn, typ) in ((:_amd_valid, Cint), (:_amd_l_valid, _Clong))
     end
 
     amd_valid(A::Symmetric{F, SparseMatrixCSC{F, $typ}}) where {F} = amd_valid(A.data)
+    amd_valid(A::Hermitian{F, SparseMatrixCSC{F, $typ}}) where {F} = amd_valid(A.data)
   end
 end
 
@@ -148,6 +149,7 @@ for (orderfn, typ) in ((:_amd_order, Cint), (:_amd_l_order, _Clong))
     end
 
     amd(A::Symmetric{F, SparseMatrixCSC{F, $typ}}, meta::Amd) where {F} = amd(A.data, meta)
+    amd(A::Hermitian{F, SparseMatrixCSC{F, $typ}}, meta::Amd) where {F} = amd(A.data, meta)
   end
 end
 
@@ -156,8 +158,8 @@ function amd(A::SparseMatrixCSC{F, T}) where {F, T <: Union{Cint, _Clong}}
   amd(A, meta)
 end
 
-@inline amd(A::Symmetric{F, SparseMatrixCSC{F, T}}) where {F, T <: Union{Cint, _Clong}} =
-  amd(A.data)
+@inline amd(A::Symmetric{F, SparseMatrixCSC{F, T}}) where {F, T <: Union{Cint, _Clong}} = amd(A.data)
+@inline amd(A::Hermitian{F, SparseMatrixCSC{F, T}}) where {F, T <: Union{Cint, _Clong}} = amd(A.data)
 
 """
     amd(A, meta)
@@ -172,7 +174,7 @@ represented as a permutation vector `p`. Factorizations of `A[p,p]` tend to
 be sparser than those of `A`.
 
 The matrix `A` must be square and the sparsity pattern of `A + Aᵀ` is implicit.
-Thus it is convenient to represent symmetric matrices using one triangle only.
+Thus it is convenient to represent symmetric or hermitian matrices using one triangle only.
 The diagonal of `A` may be present but will be ignored.
 
 The ordering may be influenced by changing `meta.control[AMD_DENSE]` and
