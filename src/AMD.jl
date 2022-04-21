@@ -158,8 +158,10 @@ function amd(A::SparseMatrixCSC{F, T}) where {F, T <: Union{Cint, _Clong}}
   amd(A, meta)
 end
 
-@inline amd(A::Symmetric{F, SparseMatrixCSC{F, T}}) where {F, T <: Union{Cint, _Clong}} = amd(A.data)
-@inline amd(A::Hermitian{F, SparseMatrixCSC{F, T}}) where {F, T <: Union{Cint, _Clong}} = amd(A.data)
+@inline amd(A::Symmetric{F, SparseMatrixCSC{F, T}}) where {F, T <: Union{Cint, _Clong}} =
+  amd(A.data)
+@inline amd(A::Hermitian{F, SparseMatrixCSC{F, T}}) where {F, T <: Union{Cint, _Clong}} =
+  amd(A.data)
 
 """
     amd(A, meta)
