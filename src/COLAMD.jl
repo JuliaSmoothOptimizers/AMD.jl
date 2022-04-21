@@ -115,8 +115,10 @@ function colamd(A::SparseMatrixCSC{F, T}) where {F, T <: Union{Cint, _Clong}}
   colamd(A, meta)
 end
 
-@inline colamd(A::Symmetric{F, SparseMatrixCSC{F, T}}) where {F, T <: Union{Cint, _Clong}} = colamd(A.data)
-@inline colamd(A::Hermitian{F, SparseMatrixCSC{F, T}}) where {F, T <: Union{Cint, _Clong}} = colamd(A.data)
+@inline colamd(A::Symmetric{F, SparseMatrixCSC{F, T}}) where {F, T <: Union{Cint, _Clong}} =
+  colamd(A.data)
+@inline colamd(A::Hermitian{F, SparseMatrixCSC{F, T}}) where {F, T <: Union{Cint, _Clong}} =
+  colamd(A.data)
 
 """
     colamd(A, meta)
@@ -168,8 +170,10 @@ function symamd(A::SparseMatrixCSC{F, T}) where {F, T <: Union{Cint, _Clong}}
   symamd(A, meta)
 end
 
-@inline symamd(A::Symmetric{F, SparseMatrixCSC{F, T}}) where {F, T <: Union{Cint, _Clong}} = symamd(A.data)
-@inline symamd(A::Hermitian{F, SparseMatrixCSC{F, T}}) where {F, T <: Union{Cint, _Clong}} = symamd(A.data)
+@inline symamd(A::Symmetric{F, SparseMatrixCSC{F, T}}) where {F, T <: Union{Cint, _Clong}} =
+  symamd(A.data)
+@inline symamd(A::Hermitian{F, SparseMatrixCSC{F, T}}) where {F, T <: Union{Cint, _Clong}} =
+  symamd(A.data)
 
 """
     symamd(A, meta)
