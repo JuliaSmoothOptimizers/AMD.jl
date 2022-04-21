@@ -105,6 +105,8 @@ for (orderfn, typ) in ((:_colamd, Cint), (:_colamd_l, _Clong))
 
     colamd(A::Symmetric{F, SparseMatrixCSC{F, $typ}}, meta::Colamd{$typ}) where {F} =
       colamd(A.data, meta)
+    colamd(A::Hermitian{F, SparseMatrixCSC{F, $typ}}, meta::Colamd{$typ}) where {F} =
+      colamd(A.data, meta)
   end
 end
 
@@ -113,8 +115,8 @@ function colamd(A::SparseMatrixCSC{F, T}) where {F, T <: Union{Cint, _Clong}}
   colamd(A, meta)
 end
 
-@inline colamd(A::Symmetric{F, SparseMatrixCSC{F, T}}) where {F, T <: Union{Cint, _Clong}} =
-  colamd(A.data)
+@inline colamd(A::Symmetric{F, SparseMatrixCSC{F, T}}) where {F, T <: Union{Cint, _Clong}} = colamd(A.data)
+@inline colamd(A::Hermitian{F, SparseMatrixCSC{F, T}}) where {F, T <: Union{Cint, _Clong}} = colamd(A.data)
 
 """
     colamd(A, meta)
@@ -156,6 +158,8 @@ for (fn, typ) in ((:_symamd, Cint), (:_symamd_l, _Clong))
 
     symamd(A::Symmetric{F, SparseMatrixCSC{F, $typ}}, meta::Colamd{$typ}) where {F} =
       symamd(A.data, meta)
+    symamd(A::Hermitian{F, SparseMatrixCSC{F, $typ}}, meta::Colamd{$typ}) where {F} =
+      symamd(A.data, meta)
   end
 end
 
@@ -164,8 +168,8 @@ function symamd(A::SparseMatrixCSC{F, T}) where {F, T <: Union{Cint, _Clong}}
   symamd(A, meta)
 end
 
-@inline symamd(A::Symmetric{F, SparseMatrixCSC{F, T}}) where {F, T <: Union{Cint, _Clong}} =
-  symamd(A.data)
+@inline symamd(A::Symmetric{F, SparseMatrixCSC{F, T}}) where {F, T <: Union{Cint, _Clong}} = symamd(A.data)
+@inline symamd(A::Hermitian{F, SparseMatrixCSC{F, T}}) where {F, T <: Union{Cint, _Clong}} = symamd(A.data)
 
 """
     symamd(A, meta)
@@ -174,7 +178,7 @@ or
 
     symamd(A)
 
-Given a symmetric matrix `A`, symamd computes a permutation vector `p`
+Given a symmetric or hermitian matrix `A`, symamd computes a permutation vector `p`
 such that the Cholesky factorization of `A[p,p]` has less fill-in and
 requires fewer floating point operations than that of A.
 """

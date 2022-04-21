@@ -36,6 +36,14 @@ for n in [10, 20, 30]
       U = Symmetric(A, :U)
       pU = amd(U)
       @test all(pA .== pU)
+
+      L = Hermitian(A, :L)
+      pL = amd(L)
+      @test all(pA .== pL)
+
+      U = Hermitian(A, :U)
+      pU = amd(U)
+      @test all(pA .== pU)
     end
   end
 end
