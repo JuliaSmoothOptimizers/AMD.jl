@@ -5,16 +5,15 @@ using Test
 using AMD
 import AMD: AMD_STATUS, AMD_OK, COLAMD_STATUS, COLAMD_OK
 
-_Clong = Base.Sys.WORD_SIZE == 32 ? Clong : Clonglong
 for n in [10, 20, 30]
   for density in [0.25, 0.75, 1.0]
-    for T in [Cint, _Clong]
+    for T in [Cint, Int64]
       A = convert(SparseMatrixCSC{Float64, T}, sprand(n, n, density))
       @test amd_valid(A)
 
       meta = Amd()
       p = amd(A, meta)
-      @test meta.info[AMD_STATUS] == AMD_OK
+      @test meta.info[AMD_STATUS+1] == AMD_OK
       @test minimum(p) == 1
       @test maximum(p) == n
       @test isperm(p)
@@ -35,12 +34,12 @@ end
 for n in [10, 20, 30]
   for m in [10, 20, 30]
     for density in [0.25, 0.75, 1.0]
-      for T in [Cint, _Clong]
+      for T in [Cint, Int64]
         A = convert(SparseMatrixCSC{Float64, T}, sprand(n, m, density))
 
         meta = Colamd{T}()
         p = colamd(A, meta)
-        @test meta.stats[COLAMD_STATUS] == COLAMD_OK
+        @test meta.stats[COLAMD_STATUS+1] == COLAMD_OK
         @test minimum(p) == 1
         @test maximum(p) == m
         @test isperm(p)
@@ -51,7 +50,7 @@ for n in [10, 20, 30]
           A = A * A'
           meta = Colamd{T}()
           p = symamd(A, meta)
-          @test meta.stats[COLAMD_STATUS] == COLAMD_OK
+          @test meta.stats[COLAMD_STATUS+1] == COLAMD_OK
           @test minimum(p) == 1
           @test maximum(p) == m
           @test isperm(p)
@@ -67,7 +66,7 @@ end
 # Test Symmetric and Hermitian wrappers
 for ordering in (:amd, :symamd, :colamd)
   for wrapper in (:Symmetric, :Hermitian)
-    for T in [Cint, _Clong]
+    for T in [Cint, Int64]
       @eval begin
         A = convert(SparseMatrixCSC{Float64, $T}, rand(10, 10))
         A = A * A'
