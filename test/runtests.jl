@@ -1,9 +1,12 @@
 using LinearAlgebra
 using SparseArrays
 using Test
+using Random
 
 using AMD
 import AMD: AMD_STATUS, AMD_OK, COLAMD_STATUS, COLAMD_OK
+
+Random.seed!(666)
 
 for n in [10, 20, 30]
   for density in [0.25, 0.75, 1.0]
