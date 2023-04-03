@@ -11,7 +11,7 @@ include("wrappers/camd.jl")
 include("wrappers/colamd.jl")
 include("wrappers/ccolamd.jl")
 
-include("amd.jl")
-include("colamd.jl")
+include("amd_julia.jl")
+include("colamd_julia.jl")
 
 end # module
