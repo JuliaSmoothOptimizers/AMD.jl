@@ -4,8 +4,8 @@ function amd_order(n, Ap, Ai, P, Control, Info)
 end
 
 function amd_l_order(n, Ap, Ai, P, Control, Info)
-  @ccall libamd.amd_l_order(n::Int64, Ap::Ptr{Int64}, Ai::Ptr{Int64}, P::Ptr{Int64},
-                            Control::Ptr{Cdouble}, Info::Ptr{Cdouble})::Int64
+  @ccall libamd.amd_l_order(n::SS_Int, Ap::Ptr{SS_Int}, Ai::Ptr{SS_Int}, P::Ptr{SS_Int},
+                            Control::Ptr{Cdouble}, Info::Ptr{Cdouble})::SS_Int
 end
 
 function amd_2(n, Pe, Iw, Len, iwlen, pfree, Nv, Next, Last, Head, Elen, Degree, W, Control, Info)
@@ -16,9 +16,9 @@ function amd_2(n, Pe, Iw, Len, iwlen, pfree, Nv, Next, Last, Head, Elen, Degree,
 end
 
 function amd_l2(n, Pe, Iw, Len, iwlen, pfree, Nv, Next, Last, Head, Elen, Degree, W, Control, Info)
-  @ccall libamd.amd_l2(n::Int64, Pe::Ptr{Int64}, Iw::Ptr{Int64}, Len::Ptr{Int64}, iwlen::Int64,
-                       pfree::Int64, Nv::Ptr{Int64}, Next::Ptr{Int64}, Last::Ptr{Int64},
-                       Head::Ptr{Int64}, Elen::Ptr{Int64}, Degree::Ptr{Int64}, W::Ptr{Int64},
+  @ccall libamd.amd_l2(n::SS_Int, Pe::Ptr{SS_Int}, Iw::Ptr{SS_Int}, Len::Ptr{SS_Int}, iwlen::SS_Int,
+                       pfree::SS_Int, Nv::Ptr{SS_Int}, Next::Ptr{SS_Int}, Last::Ptr{SS_Int},
+                       Head::Ptr{SS_Int}, Elen::Ptr{SS_Int}, Degree::Ptr{SS_Int}, W::Ptr{SS_Int},
                        Control::Ptr{Cdouble}, Info::Ptr{Cdouble})::Cvoid
 end
 
@@ -27,7 +27,7 @@ function amd_valid(n_row, n_col, Ap, Ai)
 end
 
 function amd_l_valid(n_row, n_col, Ap, Ai)
-  @ccall libamd.amd_l_valid(n_row::Int64, n_col::Int64, Ap::Ptr{Int64}, Ai::Ptr{Int64})::Int64
+  @ccall libamd.amd_l_valid(n_row::SS_Int, n_col::SS_Int, Ap::Ptr{SS_Int}, Ai::Ptr{SS_Int})::SS_Int
 end
 
 function amd_defaults(Control)

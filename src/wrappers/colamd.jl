@@ -3,7 +3,7 @@ function colamd_recommended(nnz, n_row, n_col)
 end
 
 function colamd_l_recommended(nnz, n_row, n_col)
-  @ccall libcolamd.colamd_l_recommended(nnz::Int64, n_row::Int64, n_col::Int64)::Csize_t
+  @ccall libcolamd.colamd_l_recommended(nnz::SS_Int, n_row::SS_Int, n_col::SS_Int)::Csize_t
 end
 
 function colamd_set_defaults(knobs)
@@ -20,8 +20,8 @@ function colamd(n_row, n_col, Alen, A, p, knobs, stats)
 end
 
 function colamd_l(n_row, n_col, Alen, A, p, knobs, stats)
-  @ccall libcolamd.colamd_l(n_row::Int64, n_col::Int64, Alen::Int64, A::Ptr{Int64}, p::Ptr{Int64},
-                            knobs::Ptr{Cdouble}, stats::Ptr{Int64})::Int64
+  @ccall libcolamd.colamd_l(n_row::SS_Int, n_col::SS_Int, Alen::SS_Int, A::Ptr{SS_Int}, p::Ptr{SS_Int},
+                            knobs::Ptr{Cdouble}, stats::Ptr{SS_Int})::SS_Int
 end
 
 function symamd(n, A, p, perm, knobs, stats, allocate, release)
@@ -30,9 +30,9 @@ function symamd(n, A, p, perm, knobs, stats, allocate, release)
 end
 
 function symamd_l(n, A, p, perm, knobs, stats, allocate, release)
-  @ccall libcolamd.symamd_l(n::Int64, A::Ptr{Int64}, p::Ptr{Int64}, perm::Ptr{Int64},
-                            knobs::Ptr{Cdouble}, stats::Ptr{Int64}, allocate::Ptr{Cvoid},
-                            release::Ptr{Cvoid})::Int64
+  @ccall libcolamd.symamd_l(n::SS_Int, A::Ptr{SS_Int}, p::Ptr{SS_Int}, perm::Ptr{SS_Int},
+                            knobs::Ptr{Cdouble}, stats::Ptr{SS_Int}, allocate::Ptr{Cvoid},
+                            release::Ptr{Cvoid})::SS_Int
 end
 
 function colamd_report(stats)
@@ -40,7 +40,7 @@ function colamd_report(stats)
 end
 
 function colamd_l_report(stats)
-  @ccall libcolamd.colamd_l_report(stats::Ptr{Int64})::Cvoid
+  @ccall libcolamd.colamd_l_report(stats::Ptr{SS_Int})::Cvoid
 end
 
 function symamd_report(stats)
@@ -48,7 +48,7 @@ function symamd_report(stats)
 end
 
 function symamd_l_report(stats)
-  @ccall libcolamd.symamd_l_report(stats::Ptr{Int64})::Cvoid
+  @ccall libcolamd.symamd_l_report(stats::Ptr{SS_Int})::Cvoid
 end
 
 const COLAMD_KNOBS = 20

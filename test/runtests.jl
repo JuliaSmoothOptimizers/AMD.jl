@@ -10,7 +10,7 @@ Random.seed!(666)
 
 for n in [10, 20, 30]
   for density in [0.25, 0.75, 1.0]
-    for T in [Cint, Int64]
+    for T in [Cint, SS_Int]
       A = convert(SparseMatrixCSC{Float64, T}, sprand(n, n, density))
       @test amd_valid(A)
 
@@ -37,7 +37,7 @@ end
 for n in [10, 20, 30]
   for m in [10, 20, 30]
     for density in [0.25, 0.75, 1.0]
-      for T in [Cint, Int64]
+      for T in [Cint, SS_Int]
         A = convert(SparseMatrixCSC{Float64, T}, sprand(n, m, density))
 
         meta = Colamd{T}()
@@ -69,7 +69,7 @@ end
 # Test Symmetric and Hermitian wrappers
 for ordering in (:amd, :symamd, :colamd)
   for wrapper in (:Symmetric, :Hermitian)
-    for T in [Cint, Int64]
+    for T in [Cint, SS_Int]
       @eval begin
         A = convert(SparseMatrixCSC{Float64, $T}, rand(10, 10))
         A = A * A'
