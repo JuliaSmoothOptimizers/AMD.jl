@@ -4,7 +4,7 @@ using Test
 using Random
 
 using AMD
-import AMD: AMD_STATUS, AMD_OK, COLAMD_STATUS, COLAMD_OK
+import AMD: SS_Int, AMD_STATUS, AMD_OK, COLAMD_STATUS, COLAMD_OK
 
 Random.seed!(666)
 
