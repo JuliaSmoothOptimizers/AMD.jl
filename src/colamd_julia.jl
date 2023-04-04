@@ -35,11 +35,11 @@ const colamd_statuses = Dict(
   COLAMD_ERROR_internal_error => "internal error",
 )
 
-mutable struct Colamd{T <: Union{Cint, Int64}}
+mutable struct Colamd{T <: Union{Cint, SS_Int}}
   knobs::Vector{Cdouble}
   stats::Vector{T}
 
-  function Colamd{T}() where {T <: Union{Cint, Int64}}
+  function Colamd{T}() where {T <: Union{Cint, SS_Int}}
     knobs = zeros(Cdouble, COLAMD_KNOBS)
     stats = zeros(T, COLAMD_STATS)
     colamd_set_defaults(knobs)
@@ -58,8 +58,8 @@ end
 
 print(io::IO, meta::Colamd) = show(io, meta)
 
-for (orderfn, typ) in ((:colamd  , :Cint ),
-                       (:colamd_l, :Int64))
+for (orderfn, typ) in ((:colamd  , :Cint  ),
+                       (:colamd_l, :SS_Int))
   @eval begin
     function colamd(A::SparseMatrixCSC{F, $typ}, meta::Colamd{$typ}) where {F}
       nrow, ncol = size(A)
@@ -88,8 +88,8 @@ for (orderfn, typ) in ((:colamd  , :Cint ),
   end
 end
 
-for (fn, typ) in ((:symamd  , :Cint ),
-                  (:symamd_l, :Int64))
+for (fn, typ) in ((:symamd  , :Cint  ),
+                  (:symamd_l, :SS_Int))
   @eval begin
     function symamd(A::SparseMatrixCSC{F, $typ}, meta::Colamd{$typ}) where {F}
       nrow, ncol = size(A)

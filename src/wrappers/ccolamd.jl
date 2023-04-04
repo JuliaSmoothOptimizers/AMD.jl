@@ -3,7 +3,7 @@ function ccolamd_recommended(nnz, n_row, n_col)
 end
 
 function ccolamd_l_recommended(nnz, n_row, n_col)
-  @ccall libccolamd.ccolamd_l_recommended(nnz::Int64, n_row::Int64, n_col::Int64)::Csize_t
+  @ccall libccolamd.ccolamd_l_recommended(nnz::SS_Int, n_row::SS_Int, n_col::SS_Int)::Csize_t
 end
 
 function ccolamd_set_defaults(knobs)
@@ -20,8 +20,8 @@ function ccolamd(n_row, n_col, Alen, A, p, knobs, stats, cmember)
 end
 
 function ccolamd_l(n_row, n_col, Alen, A, p, knobs, stats, cmember)
-  @ccall libccolamd.ccolamd_l(n_row::Int64, n_col::Int64, Alen::Int64, A::Ptr{Int64}, p::Ptr{Int64},
-                              knobs::Ptr{Cdouble}, stats::Ptr{Int64}, cmember::Ptr{Int64})::Int64
+  @ccall libccolamd.ccolamd_l(n_row::SS_Int, n_col::SS_Int, Alen::SS_Int, A::Ptr{SS_Int}, p::Ptr{SS_Int},
+                              knobs::Ptr{Cdouble}, stats::Ptr{SS_Int}, cmember::Ptr{SS_Int})::SS_Int
 end
 
 function csymamd(n, A, p, perm, knobs, stats, allocate, release, cmember, stype)
@@ -31,9 +31,9 @@ function csymamd(n, A, p, perm, knobs, stats, allocate, release, cmember, stype)
 end
 
 function csymamd_l(n, A, p, perm, knobs, stats, allocate, release, cmember, stype)
-  @ccall libccolamd.csymamd_l(n::Int64, A::Ptr{Int64}, p::Ptr{Int64}, perm::Ptr{Int64},
-                              knobs::Ptr{Cdouble}, stats::Ptr{Int64}, allocate::Ptr{Cvoid},
-                              release::Ptr{Cvoid}, cmember::Ptr{Int64}, stype::Int64)::Int64
+  @ccall libccolamd.csymamd_l(n::SS_Int, A::Ptr{SS_Int}, p::Ptr{SS_Int}, perm::Ptr{SS_Int},
+                              knobs::Ptr{Cdouble}, stats::Ptr{SS_Int}, allocate::Ptr{Cvoid},
+                              release::Ptr{Cvoid}, cmember::Ptr{SS_Int}, stype::SS_Int)::SS_Int
 end
 
 function ccolamd_report(stats)
@@ -41,7 +41,7 @@ function ccolamd_report(stats)
 end
 
 function ccolamd_l_report(stats)
-  @ccall libccolamd.ccolamd_l_report(stats::Ptr{Int64})::Cvoid
+  @ccall libccolamd.ccolamd_l_report(stats::Ptr{SS_Int})::Cvoid
 end
 
 function csymamd_report(stats)
@@ -49,7 +49,7 @@ function csymamd_report(stats)
 end
 
 function csymamd_l_report(stats)
-  @ccall libccolamd.csymamd_l_report(stats::Ptr{Int64})::Cvoid
+  @ccall libccolamd.csymamd_l_report(stats::Ptr{SS_Int})::Cvoid
 end
 
 function ccolamd2(n_row, n_col, Alen, A, p, knobs, stats, Front_npivcol, Front_nrows, Front_ncols,
@@ -63,12 +63,12 @@ end
 
 function ccolamd2_l(n_row, n_col, Alen, A, p, knobs, stats, Front_npivcol, Front_nrows, Front_ncols,
                     Front_parent, Front_cols, p_nfr, InFront, cmember)
-  @ccall libccolamd.ccolamd2_l(n_row::Int64, n_col::Int64, Alen::Int64, A::Ptr{Int64},
-                               p::Ptr{Int64}, knobs::Ptr{Cdouble}, stats::Ptr{Int64},
-                               Front_npivcol::Ptr{Int64}, Front_nrows::Ptr{Int64},
-                               Front_ncols::Ptr{Int64}, Front_parent::Ptr{Int64},
-                               Front_cols::Ptr{Int64}, p_nfr::Ptr{Int64}, InFront::Ptr{Int64},
-                               cmember::Ptr{Int64})::Int64
+  @ccall libccolamd.ccolamd2_l(n_row::SS_Int, n_col::SS_Int, Alen::SS_Int, A::Ptr{SS_Int},
+                               p::Ptr{SS_Int}, knobs::Ptr{Cdouble}, stats::Ptr{SS_Int},
+                               Front_npivcol::Ptr{SS_Int}, Front_nrows::Ptr{SS_Int},
+                               Front_ncols::Ptr{SS_Int}, Front_parent::Ptr{SS_Int},
+                               Front_cols::Ptr{SS_Int}, p_nfr::Ptr{SS_Int}, InFront::Ptr{SS_Int},
+                               cmember::Ptr{SS_Int})::SS_Int
 end
 
 function ccolamd_apply_order(Front, Order, Temp, nn, nfr)
@@ -77,8 +77,8 @@ function ccolamd_apply_order(Front, Order, Temp, nn, nfr)
 end
 
 function ccolamd_l_apply_order(Front, Order, Temp, nn, nfr)
-  @ccall libccolamd.ccolamd_l_apply_order(Front::Ptr{Int64}, Order::Ptr{Int64}, Temp::Ptr{Int64},
-                                          nn::Int64, nfr::Int64)::Cvoid
+  @ccall libccolamd.ccolamd_l_apply_order(Front::Ptr{SS_Int}, Order::Ptr{SS_Int}, Temp::Ptr{SS_Int},
+                                          nn::SS_Int, nfr::SS_Int)::Cvoid
 end
 
 function ccolamd_fsize(nn, MaxFsize, Fnrows, Fncols, Parent, Npiv)
@@ -87,8 +87,8 @@ function ccolamd_fsize(nn, MaxFsize, Fnrows, Fncols, Parent, Npiv)
 end
 
 function ccolamd_l_fsize(nn, MaxFsize, Fnrows, Fncols, Parent, Npiv)
-  @ccall libccolamd.ccolamd_l_fsize(nn::Int64, MaxFsize::Ptr{Int64}, Fnrows::Ptr{Int64},
-                                    Fncols::Ptr{Int64}, Parent::Ptr{Int64}, Npiv::Ptr{Int64})::Cvoid
+  @ccall libccolamd.ccolamd_l_fsize(nn::SS_Int, MaxFsize::Ptr{SS_Int}, Fnrows::Ptr{SS_Int},
+                                    Fncols::Ptr{SS_Int}, Parent::Ptr{SS_Int}, Npiv::Ptr{SS_Int})::Cvoid
 end
 
 function ccolamd_postorder(nn, Parent, Npiv, Fsize, Order, Child, Sibling, Stack, Front_cols,
@@ -101,10 +101,10 @@ end
 
 function ccolamd_l_postorder(nn, Parent, Npiv, Fsize, Order, Child, Sibling, Stack, Front_cols,
                              cmember)
-  @ccall libccolamd.ccolamd_l_postorder(nn::Int64, Parent::Ptr{Int64}, Npiv::Ptr{Int64},
-                                        Fsize::Ptr{Int64}, Order::Ptr{Int64}, Child::Ptr{Int64},
-                                        Sibling::Ptr{Int64}, Stack::Ptr{Int64},
-                                        Front_cols::Ptr{Int64}, cmember::Ptr{Int64})::Cvoid
+  @ccall libccolamd.ccolamd_l_postorder(nn::SS_Int, Parent::Ptr{SS_Int}, Npiv::Ptr{SS_Int},
+                                        Fsize::Ptr{SS_Int}, Order::Ptr{SS_Int}, Child::Ptr{SS_Int},
+                                        Sibling::Ptr{SS_Int}, Stack::Ptr{SS_Int},
+                                        Front_cols::Ptr{SS_Int}, cmember::Ptr{SS_Int})::Cvoid
 end
 
 function ccolamd_post_tree(root, k, Child, Sibling, Order, Stack)
@@ -113,9 +113,9 @@ function ccolamd_post_tree(root, k, Child, Sibling, Order, Stack)
 end
 
 function ccolamd_l_post_tree(root, k, Child, Sibling, Order, Stack)
-  @ccall libccolamd.ccolamd_l_post_tree(root::Int64, k::Int64, Child::Ptr{Int64},
-                                        Sibling::Ptr{Int64}, Order::Ptr{Int64},
-                                        Stack::Ptr{Int64})::Int64
+  @ccall libccolamd.ccolamd_l_post_tree(root::SS_Int, k::SS_Int, Child::Ptr{SS_Int},
+                                        Sibling::Ptr{SS_Int}, Order::Ptr{SS_Int},
+                                        Stack::Ptr{SS_Int})::SS_Int
 end
 
 const CCOLAMD_KNOBS = 20

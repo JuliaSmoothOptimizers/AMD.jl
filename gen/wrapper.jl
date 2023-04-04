@@ -36,7 +36,7 @@ function wrapper(name::String, headers::Vector{String})
   format_file(path, YASStyle())
 
   text = read(path, String)
-  text = replace(text, "Clong" => "Int64")
+  text = replace(text, "Clong" => "SS_Int")
   text = replace(text, "end\n\nconst" => "end\n\n\nconst")
   text = replace(text, "\n\nconst" => "\nconst")
   write(path, text)

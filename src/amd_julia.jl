@@ -72,8 +72,8 @@ end
 
 print(io::IO, meta::Amd) = show(io, meta)
 
-for (validfn, typ) in ((:amd_valid  , :Cint ),
-                       (:amd_l_valid, :Int64))
+for (validfn, typ) in ((:amd_valid  , :Cint  ),
+                       (:amd_l_valid, :SS_Int))
   @eval begin
     function amd_valid(A::SparseMatrixCSC{F, $typ}) where {F}
       nrow, ncol = size(A)
@@ -88,8 +88,8 @@ for (validfn, typ) in ((:amd_valid  , :Cint ),
   end
 end
 
-for (orderfn, typ) in ((:amd_order  , :Cint),
-                       (:amd_l_order, :Int64))
+for (orderfn, typ) in ((:amd_order  , :Cint  ),
+                       (:amd_l_order, :SS_Int))
   @eval begin
     function amd(A::SparseMatrixCSC{F, $typ}, meta::Amd) where {F}
       nrow, ncol = size(A)

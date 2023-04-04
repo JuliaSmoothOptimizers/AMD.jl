@@ -4,8 +4,8 @@ function camd_order(n, Ap, Ai, P, Control, Info, C)
 end
 
 function camd_l_order(n, Ap, Ai, P, Control, Info, C)
-  @ccall libcamd.camd_l_order(n::Int64, Ap::Ptr{Int64}, Ai::Ptr{Int64}, P::Ptr{Int64},
-                              Control::Ptr{Cdouble}, Info::Ptr{Cdouble}, C::Ptr{Int64})::Int64
+  @ccall libcamd.camd_l_order(n::SS_Int, Ap::Ptr{SS_Int}, Ai::Ptr{SS_Int}, P::Ptr{SS_Int},
+                              Control::Ptr{Cdouble}, Info::Ptr{Cdouble}, C::Ptr{SS_Int})::SS_Int
 end
 
 function camd_2(n, Pe, Iw, Len, iwlen, pfree, Nv, Next, Last, Head, Elen, Degree, W, Control, Info,
@@ -19,11 +19,11 @@ end
 
 function camd_l2(n, Pe, Iw, Len, iwlen, pfree, Nv, Next, Last, Head, Elen, Degree, W, Control, Info,
                  C, BucketSet)
-  @ccall libcamd.camd_l2(n::Int64, Pe::Ptr{Int64}, Iw::Ptr{Int64}, Len::Ptr{Int64}, iwlen::Int64,
-                         pfree::Int64, Nv::Ptr{Int64}, Next::Ptr{Int64}, Last::Ptr{Int64},
-                         Head::Ptr{Int64}, Elen::Ptr{Int64}, Degree::Ptr{Int64}, W::Ptr{Int64},
-                         Control::Ptr{Cdouble}, Info::Ptr{Cdouble}, C::Ptr{Int64},
-                         BucketSet::Ptr{Int64})::Cvoid
+  @ccall libcamd.camd_l2(n::SS_Int, Pe::Ptr{SS_Int}, Iw::Ptr{SS_Int}, Len::Ptr{SS_Int}, iwlen::SS_Int,
+                         pfree::SS_Int, Nv::Ptr{SS_Int}, Next::Ptr{SS_Int}, Last::Ptr{SS_Int},
+                         Head::Ptr{SS_Int}, Elen::Ptr{SS_Int}, Degree::Ptr{SS_Int}, W::Ptr{SS_Int},
+                         Control::Ptr{Cdouble}, Info::Ptr{Cdouble}, C::Ptr{SS_Int},
+                         BucketSet::Ptr{SS_Int})::Cvoid
 end
 
 function camd_valid(n_row, n_col, Ap, Ai)
@@ -31,7 +31,7 @@ function camd_valid(n_row, n_col, Ap, Ai)
 end
 
 function camd_l_valid(n_row, n_col, Ap, Ai)
-  @ccall libcamd.camd_l_valid(n_row::Int64, n_col::Int64, Ap::Ptr{Int64}, Ai::Ptr{Int64})::Int64
+  @ccall libcamd.camd_l_valid(n_row::SS_Int, n_col::SS_Int, Ap::Ptr{SS_Int}, Ai::Ptr{SS_Int})::SS_Int
 end
 
 function camd_cvalid(n, C)
@@ -39,7 +39,7 @@ function camd_cvalid(n, C)
 end
 
 function camd_l_cvalid(n, C)
-  @ccall libcamd.camd_l_cvalid(n::Int64, C::Ptr{Int64})::Int64
+  @ccall libcamd.camd_l_cvalid(n::SS_Int, C::Ptr{SS_Int})::SS_Int
 end
 
 function camd_defaults(Control)
