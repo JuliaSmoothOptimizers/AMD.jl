@@ -56,24 +56,27 @@ end
 
 const AMD_CONTROL = 5
 const AMD_INFO = 20
-const AMD_DENSE = 0
-const AMD_AGGRESSIVE = 1
+
+const AMD_DENSE = 1
+const AMD_AGGRESSIVE = 2
 const AMD_DEFAULT_DENSE = 10.0
-const AMD_DEFAULT_AGGRESSIVE = 1
-const AMD_STATUS = 0
-const AMD_N = 1
-const AMD_NZ = 2
-const AMD_SYMMETRY = 3
-const AMD_NZDIAG = 4
-const AMD_NZ_A_PLUS_AT = 5
-const AMD_NDENSE = 6
-const AMD_MEMORY = 7
-const AMD_NCMPA = 8
-const AMD_LNZ = 9
-const AMD_NDIV = 10
-const AMD_NMULTSUBS_LDL = 11
-const AMD_NMULTSUBS_LU = 12
-const AMD_DMAX = 13
+const AMD_DEFAULT_AGGRESSIVE = 2
+
+const AMD_STATUS = 1
+const AMD_N = 2
+const AMD_NZ = 3
+const AMD_SYMMETRY = 4
+const AMD_NZDIAG = 5
+const AMD_NZ_A_PLUS_AT = 6
+const AMD_NDENSE = 7
+const AMD_MEMORY = 8
+const AMD_NCMPA = 9
+const AMD_LNZ = 10
+const AMD_NDIV = 11
+const AMD_NMULTSUBS_LDL = 12
+const AMD_NMULTSUBS_LU = 13
+const AMD_DMAX = 14
+
 const AMD_OK = 0
 const AMD_OUT_OF_MEMORY = -1
 const AMD_INVALID = -2

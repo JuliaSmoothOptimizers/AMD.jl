@@ -48,11 +48,11 @@ mutable struct Colamd{T <: Union{Cint, SS_Int}}
 end
 
 function show(io::IO, meta::Colamd)
-  s = "dense row parameter: $(meta.knobs[COLAMD_DENSE_ROW+1])\n"
-  s *= "dense col parameter: $(meta.knobs[COLAMD_DENSE_COL+1])\n"
-  s *= "aggressive absorption: $(meta.knobs[COLAMD_AGGRESSIVE+1])\n"
-  s *= "memory defragmentation: $(meta.stats[COLAMD_DEFRAG_COUNT+1])\n"
-  s *= "status: $(colamd_statuses[meta.stats[COLAMD_STATUS+1]])\n"
+  s = "dense row parameter: $(meta.knobs[COLAMD_DENSE_ROW])\n"
+  s *= "dense col parameter: $(meta.knobs[COLAMD_DENSE_COL])\n"
+  s *= "aggressive absorption: $(meta.knobs[COLAMD_AGGRESSIVE])\n"
+  s *= "memory defragmentation: $(meta.stats[COLAMD_DEFRAG_COUNT])\n"
+  s *= "status: $(colamd_statuses[meta.stats[COLAMD_STATUS]])\n"
   print(io, s)
 end
 
@@ -69,7 +69,7 @@ for (orderfn, typ) in ((:colamd  , :Cint  ),
       workspace = zeros($typ, len)
       workspace[1:length(A.rowval)] .= A.rowval .- $typ(1)
       valid = $orderfn(nrow, ncol, len, workspace, p, meta.knobs, meta.stats)
-      Bool(valid) || throw("colamd status: $(colamd_statuses[meta.stats[COLAMD_STATUS+1]])")
+      Bool(valid) || throw("colamd status: $(colamd_statuses[meta.stats[COLAMD_STATUS]])")
       pop!(p)  # remove the number of nnz
       p .+= $typ(1)  # 1-based indexing
       return p
@@ -99,7 +99,7 @@ for (fn, typ) in ((:symamd  , :Cint  ),
       cfun_calloc = @cfunction(Base.Libc.calloc, Ptr{Cvoid}, ($typ, $typ))
       cfun_free = @cfunction(Base.Libc.free, Cvoid, (Ptr{Cvoid},))
       valid = $fn(nrow, rowval, colptr, p, meta.knobs, meta.stats, cfun_calloc, cfun_free)
-      Bool(valid) || throw("symamd status: $(colamd_statuses[meta.stats[COLAMD_STATUS+1]])")
+      Bool(valid) || throw("symamd status: $(colamd_statuses[meta.stats[COLAMD_STATUS]])")
       pop!(p)
       p .+= $typ(1)  # 1-based indexing
       return p

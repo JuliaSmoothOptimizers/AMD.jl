@@ -16,7 +16,7 @@ for n in [10, 20, 30]
 
       meta = Amd()
       p = amd(A, meta)
-      @test meta.info[AMD_STATUS+1] == AMD_OK
+      @test meta.info[AMD_STATUS] == AMD_OK
       @test minimum(p) == 1
       @test maximum(p) == n
       @test isperm(p)
@@ -42,7 +42,7 @@ for n in [10, 20, 30]
 
         meta = Colamd{T}()
         p = colamd(A, meta)
-        @test meta.stats[COLAMD_STATUS+1] == COLAMD_OK
+        @test meta.stats[COLAMD_STATUS] == COLAMD_OK
         @test minimum(p) == 1
         @test maximum(p) == m
         @test isperm(p)
@@ -53,7 +53,7 @@ for n in [10, 20, 30]
           A = A * A'
           meta = Colamd{T}()
           p = symamd(A, meta)
-          @test meta.stats[COLAMD_STATUS+1] == COLAMD_OK
+          @test meta.stats[COLAMD_STATUS] == COLAMD_OK
           @test minimum(p) == 1
           @test maximum(p) == m
           @test isperm(p)
