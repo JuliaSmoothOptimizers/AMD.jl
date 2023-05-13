@@ -53,16 +53,19 @@ end
 
 const COLAMD_KNOBS = 20
 const COLAMD_STATS = 20
-const COLAMD_DENSE_ROW = 0
-const COLAMD_DENSE_COL = 1
-const COLAMD_AGGRESSIVE = 2
-const COLAMD_DEFRAG_COUNT = 2
-const COLAMD_STATUS = 3
-const COLAMD_INFO1 = 4
-const COLAMD_INFO2 = 5
-const COLAMD_INFO3 = 6
+
+const COLAMD_DENSE_ROW = 1
+const COLAMD_DENSE_COL = 2
+const COLAMD_AGGRESSIVE = 3
+const COLAMD_DEFRAG_COUNT = 3
+const COLAMD_STATUS = 4
+const COLAMD_INFO1 = 5
+const COLAMD_INFO2 = 6
+const COLAMD_INFO3 = 7
+
 const COLAMD_OK = 0
 const COLAMD_OK_BUT_JUMBLED = 1
+
 const COLAMD_ERROR_A_not_present = -1
 const COLAMD_ERROR_p_not_present = -2
 const COLAMD_ERROR_nrow_negative = -3

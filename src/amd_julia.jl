@@ -12,7 +12,7 @@ The matrix `A` must be square and the sparsity pattern of `A + Aᵀ` is implicit
 Thus it is convenient to represent symmetric or hermitian matrices using one triangle only.
 The diagonal of `A` may be present but will be ignored.
 
-The ordering may be influenced by changing `meta.control[AMD_DENSE+1]` and `meta.control[AMD_AGGRESSIVE+1]`.
+The ordering may be influenced by changing `meta.control[AMD_DENSE]` and `meta.control[AMD_AGGRESSIVE]`.
 
 Statistics on the ordering appear in `meta.info`.
 """
@@ -29,10 +29,10 @@ const amd_statuses = Dict(
 Base type to hold control and information related to a call to AMD.
 `control` is a `Vector{Float64}` with components:
 
-* d = control[AMD_DENSE+1]: rows with more than max(d√n, 16) entries are considered "dense" and appear last in the permutation.
+* d = control[AMD_DENSE]: rows with more than max(d√n, 16) entries are considered "dense" and appear last in the permutation.
 If d < 0 no row will be treated as dense.
 
-* control[AMD_AGGRESSIVE+1]: triggers aggressive absorption if nonzero.
+* control[AMD_AGGRESSIVE]: triggers aggressive absorption if nonzero.
 
 `info` is a `Vector{Float64}` that contains statistics on the ordering.
 """
@@ -50,23 +50,23 @@ end
 
 function show(io::IO, meta::Amd)
   s = "Control:\n"
-  s *= "  dense row parameter: $(meta.control[AMD_DENSE+1])\n"
-  s *= "  aggressive absorption: $(meta.control[AMD_AGGRESSIVE+1])\n"
+  s *= "  dense row parameter: $(meta.control[AMD_DENSE])\n"
+  s *= "  aggressive absorption: $(meta.control[AMD_AGGRESSIVE])\n"
   s *= "Info:\n"
-  s *= "  status: $(amd_statuses[meta.info[AMD_STATUS+1]])\n"
-  s *= "  matrix size: $(meta.info[AMD_N+1])\n"
-  s *= "  number of nonzeros: $(meta.info[AMD_NZ+1])\n"
-  s *= "  pattern symmetry: $(meta.info[AMD_SYMMETRY+1])\n"
-  s *= "  number of nonzeros on diagonal: $(meta.info[AMD_NZDIAG+1])\n"
-  s *= "  number of nonzeros in A + Aᵀ: $(meta.info[AMD_NZ_A_PLUS_AT+1])\n"
-  s *= "  number of dense columns: $(meta.info[AMD_NDENSE+1])\n"
-  s *= "  memory used: $(meta.info[AMD_MEMORY+1])\n"
-  s *= "  number of garbage collections: $(meta.info[AMD_NCMPA+1])\n"
-  s *= "  approx number of nonzers in factor: $(meta.info[AMD_LNZ+1])\n"
-  s *= "  number of float divides: $(meta.info[AMD_NDIV+1])\n"
-  s *= "  number of float * or - for LDL: $(meta.info[AMD_NMULTSUBS_LDL+1])\n"
-  s *= "  number of float * or - for LU: $(meta.info[AMD_NMULTSUBS_LU+1])\n"
-  s *= "  max nonzeros in any column of factor: $(meta.info[AMD_DMAX+1])\n"
+  s *= "  status: $(amd_statuses[meta.info[AMD_STATUS]])\n"
+  s *= "  matrix size: $(meta.info[AMD_N])\n"
+  s *= "  number of nonzeros: $(meta.info[AMD_NZ])\n"
+  s *= "  pattern symmetry: $(meta.info[AMD_SYMMETRY])\n"
+  s *= "  number of nonzeros on diagonal: $(meta.info[AMD_NZDIAG])\n"
+  s *= "  number of nonzeros in A + Aᵀ: $(meta.info[AMD_NZ_A_PLUS_AT])\n"
+  s *= "  number of dense columns: $(meta.info[AMD_NDENSE])\n"
+  s *= "  memory used: $(meta.info[AMD_MEMORY])\n"
+  s *= "  number of garbage collections: $(meta.info[AMD_NCMPA])\n"
+  s *= "  approx number of nonzers in factor: $(meta.info[AMD_LNZ])\n"
+  s *= "  number of float divides: $(meta.info[AMD_NDIV])\n"
+  s *= "  number of float * or - for LDL: $(meta.info[AMD_NMULTSUBS_LDL])\n"
+  s *= "  number of float * or - for LU: $(meta.info[AMD_NMULTSUBS_LU])\n"
+  s *= "  max nonzeros in any column of factor: $(meta.info[AMD_DMAX])\n"
   print(io, s)
 end
 

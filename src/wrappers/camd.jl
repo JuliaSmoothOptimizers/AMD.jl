@@ -68,24 +68,27 @@ end
 
 const CAMD_CONTROL = 5
 const CAMD_INFO = 20
-const CAMD_DENSE = 0
-const CAMD_AGGRESSIVE = 1
+
+const CAMD_DENSE = 1
+const CAMD_AGGRESSIVE = 2
 const CAMD_DEFAULT_DENSE = 10.0
-const CAMD_DEFAULT_AGGRESSIVE = 1
-const CAMD_STATUS = 0
-const CAMD_N = 1
-const CAMD_NZ = 2
-const CAMD_SYMMETRY = 3
-const CAMD_NZDIAG = 4
-const CAMD_NZ_A_PLUS_AT = 5
-const CAMD_NDENSE = 6
-const CAMD_MEMORY = 7
-const CAMD_NCMPA = 8
-const CAMD_LNZ = 9
-const CAMD_NDIV = 10
-const CAMD_NMULTSUBS_LDL = 11
-const CAMD_NMULTSUBS_LU = 12
-const CAMD_DMAX = 13
+const CAMD_DEFAULT_AGGRESSIVE = 2
+
+const CAMD_STATUS = 1
+const CAMD_N = 2
+const CAMD_NZ = 3
+const CAMD_SYMMETRY = 4
+const CAMD_NZDIAG = 5
+const CAMD_NZ_A_PLUS_AT = 6
+const CAMD_NDENSE = 7
+const CAMD_MEMORY = 8
+const CAMD_NCMPA = 9
+const CAMD_LNZ = 10
+const CAMD_NDIV = 11
+const CAMD_NMULTSUBS_LDL = 12
+const CAMD_NMULTSUBS_LU = 13
+const CAMD_DMAX = 14
+
 const CAMD_OK = 0
 const CAMD_OUT_OF_MEMORY = -1
 const CAMD_INVALID = -2
