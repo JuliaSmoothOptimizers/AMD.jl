@@ -4,7 +4,6 @@ using Clang.Generators
 using JuliaFormatter
 
 function wrapper(name::String, headers::Vector{String})
-
   @info "Wrapping $name"
 
   cd(@__DIR__)
@@ -14,21 +13,53 @@ function wrapper(name::String, headers::Vector{String})
   options["general"]["library_name"] = "lib" * name
 
   options["general"]["output_ignorelist"] = [
-    "SuiteSparse_config_struct", "SuiteSparse_start", "SuiteSparse_finish",
-    "SuiteSparse_malloc", "SuiteSparse_calloc", "SuiteSparse_realloc", "SuiteSparse_free",
-    "SuiteSparse_tic", "SuiteSparse_toc", "SuiteSparse_time",
-    "SuiteSparse_hypot", "SuiteSparse_divcomplex",
-    "SuiteSparse_version", "SuiteSparse_long", "SuiteSparse_long_max", "SuiteSparse_long_idd", "SuiteSparse_long_id",
-    "SUITESPARSE_DATE", "SUITESPARSE_VERSION", "SUITESPARSE_MAIN_VERSION", "SUITESPARSE_SUB_VERSION", "SUITESPARSE_SUBSUB_VERSION",
-    "AMD_DATE", "AMD_VERSION", "AMD_MAIN_VERSION", "AMD_SUB_VERSION", "AMD_SUBSUB_VERSION",
-    "CAMD_DATE", "CAMD_VERSION", "CAMD_MAIN_VERSION", "CAMD_SUB_VERSION", "CAMD_SUBSUB_VERSION",
-    "COLAMD_DATE", "COLAMD_VERSION", "COLAMD_MAIN_VERSION", "COLAMD_SUB_VERSION", "COLAMD_SUBSUB_VERSION",
-    "CCOLAMD_DATE", "CCOLAMD_VERSION", "CCOLAMD_MAIN_VERSION", "CCOLAMD_SUB_VERSION", "CCOLAMD_SUBSUB_VERSION",
+    "SuiteSparse_config_struct",
+    "SuiteSparse_start",
+    "SuiteSparse_finish",
+    "SuiteSparse_malloc",
+    "SuiteSparse_calloc",
+    "SuiteSparse_realloc",
+    "SuiteSparse_free",
+    "SuiteSparse_tic",
+    "SuiteSparse_toc",
+    "SuiteSparse_time",
+    "SuiteSparse_hypot",
+    "SuiteSparse_divcomplex",
+    "SuiteSparse_version",
+    "SuiteSparse_long",
+    "SuiteSparse_long_max",
+    "SuiteSparse_long_idd",
+    "SuiteSparse_long_id",
+    "SUITESPARSE_DATE",
+    "SUITESPARSE_VERSION",
+    "SUITESPARSE_MAIN_VERSION",
+    "SUITESPARSE_SUB_VERSION",
+    "SUITESPARSE_SUBSUB_VERSION",
+    "AMD_DATE",
+    "AMD_VERSION",
+    "AMD_MAIN_VERSION",
+    "AMD_SUB_VERSION",
+    "AMD_SUBSUB_VERSION",
+    "CAMD_DATE",
+    "CAMD_VERSION",
+    "CAMD_MAIN_VERSION",
+    "CAMD_SUB_VERSION",
+    "CAMD_SUBSUB_VERSION",
+    "COLAMD_DATE",
+    "COLAMD_VERSION",
+    "COLAMD_MAIN_VERSION",
+    "COLAMD_SUB_VERSION",
+    "COLAMD_SUBSUB_VERSION",
+    "CCOLAMD_DATE",
+    "CCOLAMD_VERSION",
+    "CCOLAMD_MAIN_VERSION",
+    "CCOLAMD_SUB_VERSION",
+    "CCOLAMD_SUBSUB_VERSION",
   ]
 
   args = get_default_args()
   push!(args, "-I$include_dir")
-  
+
   ctx = create_context(headers, args, options)
   build!(ctx)
 
@@ -43,7 +74,7 @@ function wrapper(name::String, headers::Vector{String})
   return nothing
 end
 
-function main(name::String="all")
+function main(name::String = "all")
   include = joinpath(pwd(), "include")
 
   if name == "all" || name == "amd"
