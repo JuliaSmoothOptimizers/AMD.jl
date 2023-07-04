@@ -58,8 +58,7 @@ end
 
 print(io::IO, meta::Colamd) = show(io, meta)
 
-for (orderfn, typ) in ((:colamd  , :Cint  ),
-                       (:colamd_l, :SS_Int))
+for (orderfn, typ) in ((:colamd, :Cint), (:colamd_l, :SS_Int))
   @eval begin
     function colamd(A::SparseMatrixCSC{F, $typ}, meta::Colamd{$typ}) where {F}
       nrow, ncol = size(A)
@@ -75,8 +74,10 @@ for (orderfn, typ) in ((:colamd  , :Cint  ),
       return p
     end
 
-    colamd(A::Symmetric{F, SparseMatrixCSC{F, $typ}}, meta::Colamd{$typ}) where {F} = colamd(A.data, meta)
-    colamd(A::Hermitian{F, SparseMatrixCSC{F, $typ}}, meta::Colamd{$typ}) where {F} = colamd(A.data, meta)
+    colamd(A::Symmetric{F, SparseMatrixCSC{F, $typ}}, meta::Colamd{$typ}) where {F} =
+      colamd(A.data, meta)
+    colamd(A::Hermitian{F, SparseMatrixCSC{F, $typ}}, meta::Colamd{$typ}) where {F} =
+      colamd(A.data, meta)
 
     function colamd(A::SparseMatrixCSC{F, $typ}) where {F}
       meta = Colamd{$typ}()
@@ -88,8 +89,7 @@ for (orderfn, typ) in ((:colamd  , :Cint  ),
   end
 end
 
-for (fn, typ) in ((:symamd  , :Cint  ),
-                  (:symamd_l, :SS_Int))
+for (fn, typ) in ((:symamd, :Cint), (:symamd_l, :SS_Int))
   @eval begin
     function symamd(A::SparseMatrixCSC{F, $typ}, meta::Colamd{$typ}) where {F}
       nrow, ncol = size(A)
@@ -105,8 +105,10 @@ for (fn, typ) in ((:symamd  , :Cint  ),
       return p
     end
 
-    symamd(A::Symmetric{F, SparseMatrixCSC{F, $typ}}, meta::Colamd{$typ}) where {F} = symamd(A.data, meta)
-    symamd(A::Hermitian{F, SparseMatrixCSC{F, $typ}}, meta::Colamd{$typ}) where {F} = symamd(A.data, meta)
+    symamd(A::Symmetric{F, SparseMatrixCSC{F, $typ}}, meta::Colamd{$typ}) where {F} =
+      symamd(A.data, meta)
+    symamd(A::Hermitian{F, SparseMatrixCSC{F, $typ}}, meta::Colamd{$typ}) where {F} =
+      symamd(A.data, meta)
 
     function symamd(A::SparseMatrixCSC{F, $typ}) where {F}
       meta = Colamd{$typ}()

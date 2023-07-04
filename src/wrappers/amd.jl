@@ -1,25 +1,63 @@
 function amd_order(n, Ap, Ai, P, Control, Info)
-  @ccall libamd.amd_order(n::Cint, Ap::Ptr{Cint}, Ai::Ptr{Cint}, P::Ptr{Cint},
-                          Control::Ptr{Cdouble}, Info::Ptr{Cdouble})::Cint
+  @ccall libamd.amd_order(
+    n::Cint,
+    Ap::Ptr{Cint},
+    Ai::Ptr{Cint},
+    P::Ptr{Cint},
+    Control::Ptr{Cdouble},
+    Info::Ptr{Cdouble},
+  )::Cint
 end
 
 function amd_l_order(n, Ap, Ai, P, Control, Info)
-  @ccall libamd.amd_l_order(n::SS_Int, Ap::Ptr{SS_Int}, Ai::Ptr{SS_Int}, P::Ptr{SS_Int},
-                            Control::Ptr{Cdouble}, Info::Ptr{Cdouble})::SS_Int
+  @ccall libamd.amd_l_order(
+    n::SS_Int,
+    Ap::Ptr{SS_Int},
+    Ai::Ptr{SS_Int},
+    P::Ptr{SS_Int},
+    Control::Ptr{Cdouble},
+    Info::Ptr{Cdouble},
+  )::SS_Int
 end
 
 function amd_2(n, Pe, Iw, Len, iwlen, pfree, Nv, Next, Last, Head, Elen, Degree, W, Control, Info)
-  @ccall libamd.amd_2(n::Cint, Pe::Ptr{Cint}, Iw::Ptr{Cint}, Len::Ptr{Cint}, iwlen::Cint,
-                      pfree::Cint, Nv::Ptr{Cint}, Next::Ptr{Cint}, Last::Ptr{Cint}, Head::Ptr{Cint},
-                      Elen::Ptr{Cint}, Degree::Ptr{Cint}, W::Ptr{Cint}, Control::Ptr{Cdouble},
-                      Info::Ptr{Cdouble})::Cvoid
+  @ccall libamd.amd_2(
+    n::Cint,
+    Pe::Ptr{Cint},
+    Iw::Ptr{Cint},
+    Len::Ptr{Cint},
+    iwlen::Cint,
+    pfree::Cint,
+    Nv::Ptr{Cint},
+    Next::Ptr{Cint},
+    Last::Ptr{Cint},
+    Head::Ptr{Cint},
+    Elen::Ptr{Cint},
+    Degree::Ptr{Cint},
+    W::Ptr{Cint},
+    Control::Ptr{Cdouble},
+    Info::Ptr{Cdouble},
+  )::Cvoid
 end
 
 function amd_l2(n, Pe, Iw, Len, iwlen, pfree, Nv, Next, Last, Head, Elen, Degree, W, Control, Info)
-  @ccall libamd.amd_l2(n::SS_Int, Pe::Ptr{SS_Int}, Iw::Ptr{SS_Int}, Len::Ptr{SS_Int}, iwlen::SS_Int,
-                       pfree::SS_Int, Nv::Ptr{SS_Int}, Next::Ptr{SS_Int}, Last::Ptr{SS_Int},
-                       Head::Ptr{SS_Int}, Elen::Ptr{SS_Int}, Degree::Ptr{SS_Int}, W::Ptr{SS_Int},
-                       Control::Ptr{Cdouble}, Info::Ptr{Cdouble})::Cvoid
+  @ccall libamd.amd_l2(
+    n::SS_Int,
+    Pe::Ptr{SS_Int},
+    Iw::Ptr{SS_Int},
+    Len::Ptr{SS_Int},
+    iwlen::SS_Int,
+    pfree::SS_Int,
+    Nv::Ptr{SS_Int},
+    Next::Ptr{SS_Int},
+    Last::Ptr{SS_Int},
+    Head::Ptr{SS_Int},
+    Elen::Ptr{SS_Int},
+    Degree::Ptr{SS_Int},
+    W::Ptr{SS_Int},
+    Control::Ptr{Cdouble},
+    Info::Ptr{Cdouble},
+  )::Cvoid
 end
 
 function amd_valid(n_row, n_col, Ap, Ai)

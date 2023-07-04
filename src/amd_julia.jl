@@ -72,8 +72,7 @@ end
 
 print(io::IO, meta::Amd) = show(io, meta)
 
-for (validfn, typ) in ((:amd_valid  , :Cint  ),
-                       (:amd_l_valid, :SS_Int))
+for (validfn, typ) in ((:amd_valid, :Cint), (:amd_l_valid, :SS_Int))
   @eval begin
     function amd_valid(A::SparseMatrixCSC{F, $typ}) where {F}
       nrow, ncol = size(A)
@@ -88,8 +87,7 @@ for (validfn, typ) in ((:amd_valid  , :Cint  ),
   end
 end
 
-for (orderfn, typ) in ((:amd_order  , :Cint  ),
-                       (:amd_l_order, :SS_Int))
+for (orderfn, typ) in ((:amd_order, :Cint), (:amd_l_order, :SS_Int))
   @eval begin
     function amd(A::SparseMatrixCSC{F, $typ}, meta::Amd) where {F}
       nrow, ncol = size(A)
@@ -99,7 +97,8 @@ for (orderfn, typ) in ((:amd_order  , :Cint  ),
 
       p = zeros($typ, nrow)
       valid = $orderfn(nrow, colptr, rowval, p, meta.control, meta.info)
-      (valid == AMD_OK || valid == AMD_OK_BUT_JUMBLED) || throw("amd_order returns: $(amd_statuses[valid])")
+      (valid == AMD_OK || valid == AMD_OK_BUT_JUMBLED) ||
+        throw("amd_order returns: $(amd_statuses[valid])")
       p .+= 1
       return p
     end
