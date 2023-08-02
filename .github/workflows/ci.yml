@@ -23,6 +23,10 @@ jobs:
             arch: x64
             allow_failure: true
           - version: 'nightly'
+            os: ubuntu-latest
+            arch: x86
+            allow_failure: true
+          - version: 'nightly'
             os: macOS-latest
             arch: x64
             allow_failure: true
