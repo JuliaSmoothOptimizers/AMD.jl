@@ -58,7 +58,10 @@ end
 
 print(io::IO, meta::Colamd) = show(io, meta)
 
-for (orderfn, typ) in ((:colamd, :Cint), (:colamd_l, :SS_Int))
+for (fn, typ) in ((:colamd  , :Cint  ),
+                  (:colamd_l, :SS_Int))
+
+  Base.Sys.WORD_SIZE == 32 && fn == :colamd_l && continue
   @eval begin
     function colamd(A::SparseMatrixCSC{F, $typ}, meta::Colamd{$typ}) where {F}
       nrow, ncol = size(A)
@@ -67,7 +70,7 @@ for (orderfn, typ) in ((:colamd, :Cint), (:colamd_l, :SS_Int))
       len = colamd_recommended($typ(nnz), $typ(nrow), $typ(ncol))
       workspace = zeros($typ, len)
       workspace[1:length(A.rowval)] .= A.rowval .- $typ(1)
-      valid = $orderfn(nrow, ncol, len, workspace, p, meta.knobs, meta.stats)
+      valid = $fn(nrow, ncol, len, workspace, p, meta.knobs, meta.stats)
       Bool(valid) || throw("colamd status: $(colamd_statuses[meta.stats[COLAMD_STATUS]])")
       pop!(p)  # remove the number of nnz
       p .+= $typ(1)  # 1-based indexing
@@ -89,7 +92,10 @@ for (orderfn, typ) in ((:colamd, :Cint), (:colamd_l, :SS_Int))
   end
 end
 
-for (fn, typ) in ((:symamd, :Cint), (:symamd_l, :SS_Int))
+for (fn, typ) in ((:symamd  , :Cint  ),
+                  (:symamd_l, :SS_Int))
+
+  Base.Sys.WORD_SIZE == 32 && fn == :symamd_l && continue
   @eval begin
     function symamd(A::SparseMatrixCSC{F, $typ}, meta::Colamd{$typ}) where {F}
       nrow, ncol = size(A)
