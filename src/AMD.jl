@@ -6,7 +6,7 @@ using SuiteSparse_jll
 
 import Base.show, Base.print
 
-SS_Int = Base.Sys.WORD_SIZE == 32 ? Int32 : Int64
+const SS_Int = Base.Sys.WORD_SIZE == 32 ? Int32 : Int64
 
 include("wrappers/amd.jl")
 include("wrappers/camd.jl")
