@@ -19,7 +19,7 @@ function camd_l_order(n, Ap, Ai, P, Control, Info, C)
     Control::Ptr{Cdouble},
     Info::Ptr{Cdouble},
     C::Ptr{SS_Int},
-  )::SS_Int
+  )::Cint
 end
 
 function camd_2(
@@ -107,12 +107,7 @@ function camd_valid(n_row, n_col, Ap, Ai)
 end
 
 function camd_l_valid(n_row, n_col, Ap, Ai)
-  @ccall libcamd.camd_l_valid(
-    n_row::SS_Int,
-    n_col::SS_Int,
-    Ap::Ptr{SS_Int},
-    Ai::Ptr{SS_Int},
-  )::SS_Int
+  @ccall libcamd.camd_l_valid(n_row::SS_Int, n_col::SS_Int, Ap::Ptr{SS_Int}, Ai::Ptr{SS_Int})::Cint
 end
 
 function camd_cvalid(n, C)
@@ -120,7 +115,7 @@ function camd_cvalid(n, C)
 end
 
 function camd_l_cvalid(n, C)
-  @ccall libcamd.camd_l_cvalid(n::SS_Int, C::Ptr{SS_Int})::SS_Int
+  @ccall libcamd.camd_l_cvalid(n::SS_Int, C::Ptr{SS_Int})::Cint
 end
 
 function camd_defaults(Control)

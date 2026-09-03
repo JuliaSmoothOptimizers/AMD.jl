@@ -98,3 +98,8 @@ meta = Colamd{Cint}()
 p = colamd(A, meta)
 show(meta)
 print(meta)
+
+# SuiteSparse >= 6 declares every `*_l` entry point with `int64_t` on all platforms.
+if isdefined(Base, :pkgversion) && pkgversion(AMD.SuiteSparse_jll) >= v"6"
+  @test SS_Int === Int64
+end
