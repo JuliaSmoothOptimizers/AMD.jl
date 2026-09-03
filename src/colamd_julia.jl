@@ -59,7 +59,6 @@ end
 print(io::IO, meta::Colamd) = show(io, meta)
 
 for (fn, typ) in ((:colamd, :Cint), (:colamd_l, :SS_Int))
-  SS_Int === Cint && fn == :colamd_l && continue
   @eval begin
     function colamd(A::SparseMatrixCSC{F, $typ}, meta::Colamd{$typ}) where {F}
       nrow, ncol = size(A)
@@ -91,7 +90,6 @@ for (fn, typ) in ((:colamd, :Cint), (:colamd_l, :SS_Int))
 end
 
 for (fn, typ) in ((:symamd, :Cint), (:symamd_l, :SS_Int))
-  SS_Int === Cint && fn == :symamd_l && continue
   @eval begin
     function symamd(A::SparseMatrixCSC{F, $typ}, meta::Colamd{$typ}) where {F}
       nrow, ncol = size(A)

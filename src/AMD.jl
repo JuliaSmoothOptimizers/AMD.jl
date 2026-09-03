@@ -6,15 +6,9 @@ using SuiteSparse_jll
 
 import Base.show, Base.print
 
-# Julia counterpart of `SuiteSparse_long`, the integer type of the `*_l` entrypoints.
-# SuiteSparse >= 6 fixes it to `int64_t` while SuiteSparse <= 5 uses C `long`, which
-# is 32 bits on 32-bit platforms.
-# Every Julia release without `pkgversion` ships SuiteSparse 5.
-const SS_Int = if isdefined(Base, :pkgversion) && pkgversion(SuiteSparse_jll) >= v"6"
-  Int64
-else
-  Base.Sys.WORD_SIZE == 32 ? Int32 : Int64
-end
+# Julia counterpart of `SuiteSparse_long`, the integer type of the `*_l` entry
+# points, which is `int64_t` on every platform since SuiteSparse 6.
+const SS_Int = Int64
 
 include("wrappers/amd.jl")
 include("wrappers/camd.jl")
