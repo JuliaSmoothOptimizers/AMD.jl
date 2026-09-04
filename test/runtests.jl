@@ -98,4 +98,3 @@ meta = Colamd{Cint}()
 p = colamd(A, meta)
 show(meta)
 print(meta)
-
