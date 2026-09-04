@@ -1,29 +1,105 @@
 function camd_order(n, Ap, Ai, P, Control, Info, C)
-  @ccall libcamd.camd_order(n::Int32, Ap::Ptr{Int32}, Ai::Ptr{Int32}, P::Ptr{Int32},
-                            Control::Ptr{Cdouble}, Info::Ptr{Cdouble}, C::Ptr{Int32})::Cint
+  @ccall libcamd.camd_order(
+    n::Int32,
+    Ap::Ptr{Int32},
+    Ai::Ptr{Int32},
+    P::Ptr{Int32},
+    Control::Ptr{Cdouble},
+    Info::Ptr{Cdouble},
+    C::Ptr{Int32},
+  )::Cint
 end
 
 function camd_l_order(n, Ap, Ai, P, Control, Info, C)
-  @ccall libcamd.camd_l_order(n::Int64, Ap::Ptr{Int64}, Ai::Ptr{Int64}, P::Ptr{Int64},
-                              Control::Ptr{Cdouble}, Info::Ptr{Cdouble}, C::Ptr{Int64})::Cint
+  @ccall libcamd.camd_l_order(
+    n::Int64,
+    Ap::Ptr{Int64},
+    Ai::Ptr{Int64},
+    P::Ptr{Int64},
+    Control::Ptr{Cdouble},
+    Info::Ptr{Cdouble},
+    C::Ptr{Int64},
+  )::Cint
 end
 
-function camd_2(n, Pe, Iw, Len, iwlen, pfree, Nv, Next, Last, Head, Elen, Degree, W, Control, Info,
-                C, BucketSet)
-  @ccall libcamd.camd_2(n::Int32, Pe::Ptr{Int32}, Iw::Ptr{Int32}, Len::Ptr{Int32}, iwlen::Int32,
-                        pfree::Int32, Nv::Ptr{Int32}, Next::Ptr{Int32}, Last::Ptr{Int32},
-                        Head::Ptr{Int32}, Elen::Ptr{Int32}, Degree::Ptr{Int32}, W::Ptr{Int32},
-                        Control::Ptr{Cdouble}, Info::Ptr{Cdouble}, C::Ptr{Int32},
-                        BucketSet::Ptr{Int32})::Cvoid
+function camd_2(
+  n,
+  Pe,
+  Iw,
+  Len,
+  iwlen,
+  pfree,
+  Nv,
+  Next,
+  Last,
+  Head,
+  Elen,
+  Degree,
+  W,
+  Control,
+  Info,
+  C,
+  BucketSet,
+)
+  @ccall libcamd.camd_2(
+    n::Int32,
+    Pe::Ptr{Int32},
+    Iw::Ptr{Int32},
+    Len::Ptr{Int32},
+    iwlen::Int32,
+    pfree::Int32,
+    Nv::Ptr{Int32},
+    Next::Ptr{Int32},
+    Last::Ptr{Int32},
+    Head::Ptr{Int32},
+    Elen::Ptr{Int32},
+    Degree::Ptr{Int32},
+    W::Ptr{Int32},
+    Control::Ptr{Cdouble},
+    Info::Ptr{Cdouble},
+    C::Ptr{Int32},
+    BucketSet::Ptr{Int32},
+  )::Cvoid
 end
 
-function camd_l2(n, Pe, Iw, Len, iwlen, pfree, Nv, Next, Last, Head, Elen, Degree, W, Control, Info,
-                 C, BucketSet)
-  @ccall libcamd.camd_l2(n::Int64, Pe::Ptr{Int64}, Iw::Ptr{Int64}, Len::Ptr{Int64}, iwlen::Int64,
-                         pfree::Int64, Nv::Ptr{Int64}, Next::Ptr{Int64}, Last::Ptr{Int64},
-                         Head::Ptr{Int64}, Elen::Ptr{Int64}, Degree::Ptr{Int64}, W::Ptr{Int64},
-                         Control::Ptr{Cdouble}, Info::Ptr{Cdouble}, C::Ptr{Int64},
-                         BucketSet::Ptr{Int64})::Cvoid
+function camd_l2(
+  n,
+  Pe,
+  Iw,
+  Len,
+  iwlen,
+  pfree,
+  Nv,
+  Next,
+  Last,
+  Head,
+  Elen,
+  Degree,
+  W,
+  Control,
+  Info,
+  C,
+  BucketSet,
+)
+  @ccall libcamd.camd_l2(
+    n::Int64,
+    Pe::Ptr{Int64},
+    Iw::Ptr{Int64},
+    Len::Ptr{Int64},
+    iwlen::Int64,
+    pfree::Int64,
+    Nv::Ptr{Int64},
+    Next::Ptr{Int64},
+    Last::Ptr{Int64},
+    Head::Ptr{Int64},
+    Elen::Ptr{Int64},
+    Degree::Ptr{Int64},
+    W::Ptr{Int64},
+    Control::Ptr{Cdouble},
+    Info::Ptr{Cdouble},
+    C::Ptr{Int64},
+    BucketSet::Ptr{Int64},
+  )::Cvoid
 end
 
 function camd_valid(n_row, n_col, Ap, Ai)

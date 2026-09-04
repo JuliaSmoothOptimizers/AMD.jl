@@ -58,8 +58,7 @@ end
 
 print(io::IO, meta::Colamd) = show(io, meta)
 
-for (fn, INT) in ((:colamd  , :Int32),
-                  (:colamd_l, :Int64))
+for (fn, INT) in ((:colamd, :Int32), (:colamd_l, :Int64))
   @eval begin
     function colamd(A::SparseMatrixCSC{F, $INT}, meta::Colamd{$INT}) where {F}
       nrow, ncol = size(A)
@@ -90,8 +89,7 @@ for (fn, INT) in ((:colamd  , :Int32),
   end
 end
 
-for (fn, INT) in ((:symamd  , :Int32),
-                  (:symamd_l, :Int64))
+for (fn, INT) in ((:symamd, :Int32), (:symamd_l, :Int64))
   @eval begin
     function symamd(A::SparseMatrixCSC{F, $INT}, meta::Colamd{$INT}) where {F}
       nrow, ncol = size(A)

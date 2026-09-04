@@ -15,25 +15,53 @@ function colamd_l_set_defaults(knobs)
 end
 
 function colamd(n_row, n_col, Alen, A, p, knobs, stats)
-  @ccall libcolamd.colamd(n_row::Int32, n_col::Int32, Alen::Int32, A::Ptr{Int32}, p::Ptr{Int32},
-                          knobs::Ptr{Cdouble}, stats::Ptr{Int32})::Cint
+  @ccall libcolamd.colamd(
+    n_row::Int32,
+    n_col::Int32,
+    Alen::Int32,
+    A::Ptr{Int32},
+    p::Ptr{Int32},
+    knobs::Ptr{Cdouble},
+    stats::Ptr{Int32},
+  )::Cint
 end
 
 function colamd_l(n_row, n_col, Alen, A, p, knobs, stats)
-  @ccall libcolamd.colamd_l(n_row::Int64, n_col::Int64, Alen::Int64, A::Ptr{Int64}, p::Ptr{Int64},
-                            knobs::Ptr{Cdouble}, stats::Ptr{Int64})::Cint
+  @ccall libcolamd.colamd_l(
+    n_row::Int64,
+    n_col::Int64,
+    Alen::Int64,
+    A::Ptr{Int64},
+    p::Ptr{Int64},
+    knobs::Ptr{Cdouble},
+    stats::Ptr{Int64},
+  )::Cint
 end
 
 function symamd(n, A, p, perm, knobs, stats, allocate, release)
-  @ccall libcolamd.symamd(n::Int32, A::Ptr{Int32}, p::Ptr{Int32}, perm::Ptr{Int32},
-                          knobs::Ptr{Cdouble}, stats::Ptr{Int32}, allocate::Ptr{Cvoid},
-                          release::Ptr{Cvoid})::Cint
+  @ccall libcolamd.symamd(
+    n::Int32,
+    A::Ptr{Int32},
+    p::Ptr{Int32},
+    perm::Ptr{Int32},
+    knobs::Ptr{Cdouble},
+    stats::Ptr{Int32},
+    allocate::Ptr{Cvoid},
+    release::Ptr{Cvoid},
+  )::Cint
 end
 
 function symamd_l(n, A, p, perm, knobs, stats, allocate, release)
-  @ccall libcolamd.symamd_l(n::Int64, A::Ptr{Int64}, p::Ptr{Int64}, perm::Ptr{Int64},
-                            knobs::Ptr{Cdouble}, stats::Ptr{Int64}, allocate::Ptr{Cvoid},
-                            release::Ptr{Cvoid})::Cint
+  @ccall libcolamd.symamd_l(
+    n::Int64,
+    A::Ptr{Int64},
+    p::Ptr{Int64},
+    perm::Ptr{Int64},
+    knobs::Ptr{Cdouble},
+    stats::Ptr{Int64},
+    allocate::Ptr{Cvoid},
+    release::Ptr{Cvoid},
+  )::Cint
 end
 
 function colamd_report(stats)
