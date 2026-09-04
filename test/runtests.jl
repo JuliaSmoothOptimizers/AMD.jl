@@ -4,14 +4,14 @@ using Test
 using Random
 
 using AMD
-import AMD: SS_Int, AMD_STATUS, AMD_OK, COLAMD_STATUS, COLAMD_OK
+import AMD: AMD_STATUS, AMD_OK, COLAMD_STATUS, COLAMD_OK
 
 Random.seed!(666)
 
 for n in [10, 20, 30]
   for density in [0.25, 0.75, 1.0]
-    for T in [Cint, SS_Int]
-      A = convert(SparseMatrixCSC{Float64, T}, sprand(n, n, density))
+    for INT in [Int32, Int64]
+      A = convert(SparseMatrixCSC{Float64, INT}, sprand(n, n, density))
       @test amd_valid(A)
 
       meta = Amd()
@@ -37,10 +37,10 @@ end
 for n in [10, 20, 30]
   for m in [10, 20, 30]
     for density in [0.25, 0.75, 1.0]
-      for T in [Cint, SS_Int]
-        A = convert(SparseMatrixCSC{Float64, T}, sprand(n, m, density))
+      for INT in [Int32, Int64]
+        A = convert(SparseMatrixCSC{Float64, INT}, sprand(n, m, density))
 
-        meta = Colamd{T}()
+        meta = Colamd{INT}()
         p = colamd(A, meta)
         @test meta.stats[COLAMD_STATUS] == COLAMD_OK
         @test minimum(p) == 1
@@ -51,7 +51,7 @@ for n in [10, 20, 30]
 
         if n == m
           A = A * A'
-          meta = Colamd{T}()
+          meta = Colamd{INT}()
           p = symamd(A, meta)
           @test meta.stats[COLAMD_STATUS] == COLAMD_OK
           @test minimum(p) == 1
@@ -69,9 +69,9 @@ end
 # Test Symmetric and Hermitian wrappers
 for ordering in (:amd, :symamd, :colamd)
   for wrapper in (:Symmetric, :Hermitian)
-    for T in [Cint, SS_Int]
+    for INT in [Int32, Int64]
       @eval begin
-        A = convert(SparseMatrixCSC{Float64, $T}, rand(10, 10))
+        A = convert(SparseMatrixCSC{Float64, $INT}, rand(10, 10))
         A = A * A'
         p = $ordering(A)
 

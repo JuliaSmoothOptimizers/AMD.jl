@@ -35,13 +35,13 @@ const colamd_statuses = Dict(
   COLAMD_ERROR_internal_error => "internal error",
 )
 
-mutable struct Colamd{T <: Union{Cint, SS_Int}}
+mutable struct Colamd{INT <: Union{Int32, Int64}}
   knobs::Vector{Cdouble}
-  stats::Vector{T}
+  stats::Vector{INT}
 
-  function Colamd{T}() where {T <: Union{Cint, SS_Int}}
+  function Colamd{INT}() where {INT <: Union{Int32, Int64}}
     knobs = zeros(Cdouble, COLAMD_KNOBS)
-    stats = zeros(T, COLAMD_STATS)
+    stats = zeros(INT, COLAMD_STATS)
     colamd_set_defaults(knobs)
     return new(knobs, stats)
   end
@@ -58,64 +58,66 @@ end
 
 print(io::IO, meta::Colamd) = show(io, meta)
 
-for (fn, typ) in ((:colamd, :Cint), (:colamd_l, :SS_Int))
+for (fn, INT) in ((:colamd  , :Int32),
+                  (:colamd_l, :Int64))
   @eval begin
-    function colamd(A::SparseMatrixCSC{F, $typ}, meta::Colamd{$typ}) where {F}
+    function colamd(A::SparseMatrixCSC{F, $INT}, meta::Colamd{$INT}) where {F}
       nrow, ncol = size(A)
       nnz = A.colptr[end] - 1
-      p = A.colptr .- $typ(1)  # 0-based indexing
-      len = colamd_recommended($typ(nnz), $typ(nrow), $typ(ncol))
-      workspace = zeros($typ, len)
-      workspace[1:length(A.rowval)] .= A.rowval .- $typ(1)
+      p = A.colptr .- $INT(1)  # 0-based indexing
+      len = colamd_recommended($INT(nnz), $INT(nrow), $INT(ncol))
+      workspace = zeros($INT, len)
+      workspace[1:length(A.rowval)] .= A.rowval .- $INT(1)
       valid = $fn(nrow, ncol, len, workspace, p, meta.knobs, meta.stats)
       Bool(valid) || throw("colamd status: $(colamd_statuses[meta.stats[COLAMD_STATUS]])")
       pop!(p)  # remove the number of nnz
-      p .+= $typ(1)  # 1-based indexing
+      p .+= $INT(1)  # 1-based indexing
       return p
     end
 
-    colamd(A::Symmetric{F, SparseMatrixCSC{F, $typ}}, meta::Colamd{$typ}) where {F} =
+    colamd(A::Symmetric{F, SparseMatrixCSC{F, $INT}}, meta::Colamd{$INT}) where {F} =
       colamd(A.data, meta)
-    colamd(A::Hermitian{F, SparseMatrixCSC{F, $typ}}, meta::Colamd{$typ}) where {F} =
+    colamd(A::Hermitian{F, SparseMatrixCSC{F, $INT}}, meta::Colamd{$INT}) where {F} =
       colamd(A.data, meta)
 
-    function colamd(A::SparseMatrixCSC{F, $typ}) where {F}
-      meta = Colamd{$typ}()
+    function colamd(A::SparseMatrixCSC{F, $INT}) where {F}
+      meta = Colamd{$INT}()
       colamd(A, meta)
     end
 
-    colamd(A::Symmetric{F, SparseMatrixCSC{F, $typ}}) where {F} = colamd(A.data)
-    colamd(A::Hermitian{F, SparseMatrixCSC{F, $typ}}) where {F} = colamd(A.data)
+    colamd(A::Symmetric{F, SparseMatrixCSC{F, $INT}}) where {F} = colamd(A.data)
+    colamd(A::Hermitian{F, SparseMatrixCSC{F, $INT}}) where {F} = colamd(A.data)
   end
 end
 
-for (fn, typ) in ((:symamd, :Cint), (:symamd_l, :SS_Int))
+for (fn, INT) in ((:symamd  , :Int32),
+                  (:symamd_l, :Int64))
   @eval begin
-    function symamd(A::SparseMatrixCSC{F, $typ}, meta::Colamd{$typ}) where {F}
+    function symamd(A::SparseMatrixCSC{F, $INT}, meta::Colamd{$INT}) where {F}
       nrow, ncol = size(A)
-      colptr = A.colptr .- $typ(1)  # 0-based indexing
-      rowval = A.rowval .- $typ(1)
-      p = zeros($typ, nrow + 1) # p is used as a workspace during the ordering, which is why it must be of length n+1, not just n
+      colptr = A.colptr .- $INT(1)  # 0-based indexing
+      rowval = A.rowval .- $INT(1)
+      p = zeros($INT, nrow + 1) # p is used as a workspace during the ordering, which is why it must be of length n+1, not just n
       cfun_calloc = @cfunction(Base.Libc.calloc, Ptr{Cvoid}, (Csize_t, Csize_t))
       cfun_free = @cfunction(Base.Libc.free, Cvoid, (Ptr{Cvoid},))
       valid = $fn(nrow, rowval, colptr, p, meta.knobs, meta.stats, cfun_calloc, cfun_free)
       Bool(valid) || throw("symamd status: $(colamd_statuses[meta.stats[COLAMD_STATUS]])")
       pop!(p)
-      p .+= $typ(1)  # 1-based indexing
+      p .+= $INT(1)  # 1-based indexing
       return p
     end
 
-    symamd(A::Symmetric{F, SparseMatrixCSC{F, $typ}}, meta::Colamd{$typ}) where {F} =
+    symamd(A::Symmetric{F, SparseMatrixCSC{F, $INT}}, meta::Colamd{$INT}) where {F} =
       symamd(A.data, meta)
-    symamd(A::Hermitian{F, SparseMatrixCSC{F, $typ}}, meta::Colamd{$typ}) where {F} =
+    symamd(A::Hermitian{F, SparseMatrixCSC{F, $INT}}, meta::Colamd{$INT}) where {F} =
       symamd(A.data, meta)
 
-    function symamd(A::SparseMatrixCSC{F, $typ}) where {F}
-      meta = Colamd{$typ}()
+    function symamd(A::SparseMatrixCSC{F, $INT}) where {F}
+      meta = Colamd{$INT}()
       symamd(A, meta)
     end
 
-    symamd(A::Symmetric{F, SparseMatrixCSC{F, $typ}}) where {F} = symamd(A.data)
-    symamd(A::Hermitian{F, SparseMatrixCSC{F, $typ}}) where {F} = symamd(A.data)
+    symamd(A::Symmetric{F, SparseMatrixCSC{F, $INT}}) where {F} = symamd(A.data)
+    symamd(A::Hermitian{F, SparseMatrixCSC{F, $INT}}) where {F} = symamd(A.data)
   end
 end

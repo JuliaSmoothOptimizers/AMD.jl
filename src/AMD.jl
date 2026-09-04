@@ -6,10 +6,6 @@ using SuiteSparse_jll
 
 import Base.show, Base.print
 
-# Julia counterpart of `SuiteSparse_long`, the integer type of the `*_l` entry
-# points, which is `int64_t` on every platform since SuiteSparse 6.
-const SS_Int = Int64
-
 include("wrappers/amd.jl")
 include("wrappers/camd.jl")
 include("wrappers/colamd.jl")

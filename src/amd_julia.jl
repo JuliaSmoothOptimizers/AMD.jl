@@ -72,30 +72,32 @@ end
 
 print(io::IO, meta::Amd) = show(io, meta)
 
-for (validfn, typ) in ((:amd_valid, :Cint), (:amd_l_valid, :SS_Int))
+for (validfn, INT) in ((:amd_valid  , :Int32),
+                       (:amd_l_valid, :Int64))
   @eval begin
-    function amd_valid(A::SparseMatrixCSC{F, $typ}) where {F}
+    function amd_valid(A::SparseMatrixCSC{F, $INT}) where {F}
       nrow, ncol = size(A)
-      colptr = A.colptr .- $typ(1)  # 0-based indexing
-      rowval = A.rowval .- $typ(1)
+      colptr = A.colptr .- $INT(1)  # 0-based indexing
+      rowval = A.rowval .- $INT(1)
       valid = $validfn(nrow, ncol, colptr, rowval)
       return valid == AMD_OK || valid == AMD_OK_BUT_JUMBLED
     end
 
-    amd_valid(A::Symmetric{F, SparseMatrixCSC{F, $typ}}) where {F} = amd_valid(A.data)
-    amd_valid(A::Hermitian{F, SparseMatrixCSC{F, $typ}}) where {F} = amd_valid(A.data)
+    amd_valid(A::Symmetric{F, SparseMatrixCSC{F, $INT}}) where {F} = amd_valid(A.data)
+    amd_valid(A::Hermitian{F, SparseMatrixCSC{F, $INT}}) where {F} = amd_valid(A.data)
   end
 end
 
-for (orderfn, typ) in ((:amd_order, :Cint), (:amd_l_order, :SS_Int))
+for (orderfn, INT) in ((:amd_order  , :Int32),
+                       (:amd_l_order, :Int64))
   @eval begin
-    function amd(A::SparseMatrixCSC{F, $typ}, meta::Amd) where {F}
+    function amd(A::SparseMatrixCSC{F, $INT}, meta::Amd) where {F}
       nrow, ncol = size(A)
       nrow == ncol || error("AMD: input matrix must be square")
-      colptr = A.colptr .- $typ(1)  # 0-based indexing
-      rowval = A.rowval .- $typ(1)
+      colptr = A.colptr .- $INT(1)  # 0-based indexing
+      rowval = A.rowval .- $INT(1)
 
-      p = zeros($typ, nrow)
+      p = zeros($INT, nrow)
       valid = $orderfn(nrow, colptr, rowval, p, meta.control, meta.info)
       (valid == AMD_OK || valid == AMD_OK_BUT_JUMBLED) ||
         throw("amd_order returns: $(amd_statuses[valid])")
@@ -103,15 +105,15 @@ for (orderfn, typ) in ((:amd_order, :Cint), (:amd_l_order, :SS_Int))
       return p
     end
 
-    amd(A::Symmetric{F, SparseMatrixCSC{F, $typ}}, meta::Amd) where {F} = amd(A.data, meta)
-    amd(A::Hermitian{F, SparseMatrixCSC{F, $typ}}, meta::Amd) where {F} = amd(A.data, meta)
+    amd(A::Symmetric{F, SparseMatrixCSC{F, $INT}}, meta::Amd) where {F} = amd(A.data, meta)
+    amd(A::Hermitian{F, SparseMatrixCSC{F, $INT}}, meta::Amd) where {F} = amd(A.data, meta)
 
-    function amd(A::SparseMatrixCSC{F, $typ}) where {F}
+    function amd(A::SparseMatrixCSC{F, $INT}) where {F}
       meta = Amd()
       amd(A, meta)
     end
 
-    amd(A::Symmetric{F, SparseMatrixCSC{F, $typ}}) where {F} = amd(A.data)
-    amd(A::Hermitian{F, SparseMatrixCSC{F, $typ}}) where {F} = amd(A.data)
+    amd(A::Symmetric{F, SparseMatrixCSC{F, $INT}}) where {F} = amd(A.data)
+    amd(A::Hermitian{F, SparseMatrixCSC{F, $INT}}) where {F} = amd(A.data)
   end
 end
