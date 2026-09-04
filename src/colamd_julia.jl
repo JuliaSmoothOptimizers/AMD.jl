@@ -59,7 +59,6 @@ end
 print(io::IO, meta::Colamd) = show(io, meta)
 
 for (fn, typ) in ((:colamd, :Cint), (:colamd_l, :SS_Int))
-  Base.Sys.WORD_SIZE == 32 && fn == :colamd_l && continue
   @eval begin
     function colamd(A::SparseMatrixCSC{F, $typ}, meta::Colamd{$typ}) where {F}
       nrow, ncol = size(A)
@@ -91,14 +90,13 @@ for (fn, typ) in ((:colamd, :Cint), (:colamd_l, :SS_Int))
 end
 
 for (fn, typ) in ((:symamd, :Cint), (:symamd_l, :SS_Int))
-  Base.Sys.WORD_SIZE == 32 && fn == :symamd_l && continue
   @eval begin
     function symamd(A::SparseMatrixCSC{F, $typ}, meta::Colamd{$typ}) where {F}
       nrow, ncol = size(A)
       colptr = A.colptr .- $typ(1)  # 0-based indexing
       rowval = A.rowval .- $typ(1)
       p = zeros($typ, nrow + 1) # p is used as a workspace during the ordering, which is why it must be of length n+1, not just n
-      cfun_calloc = @cfunction(Base.Libc.calloc, Ptr{Cvoid}, ($typ, $typ))
+      cfun_calloc = @cfunction(Base.Libc.calloc, Ptr{Cvoid}, (Csize_t, Csize_t))
       cfun_free = @cfunction(Base.Libc.free, Cvoid, (Ptr{Cvoid},))
       valid = $fn(nrow, rowval, colptr, p, meta.knobs, meta.stats, cfun_calloc, cfun_free)
       Bool(valid) || throw("symamd status: $(colamd_statuses[meta.stats[COLAMD_STATUS]])")

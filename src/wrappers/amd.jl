@@ -17,7 +17,7 @@ function amd_l_order(n, Ap, Ai, P, Control, Info)
     P::Ptr{SS_Int},
     Control::Ptr{Cdouble},
     Info::Ptr{Cdouble},
-  )::SS_Int
+  )::Cint
 end
 
 function amd_2(n, Pe, Iw, Len, iwlen, pfree, Nv, Next, Last, Head, Elen, Degree, W, Control, Info)
@@ -65,7 +65,7 @@ function amd_valid(n_row, n_col, Ap, Ai)
 end
 
 function amd_l_valid(n_row, n_col, Ap, Ai)
-  @ccall libamd.amd_l_valid(n_row::SS_Int, n_col::SS_Int, Ap::Ptr{SS_Int}, Ai::Ptr{SS_Int})::SS_Int
+  @ccall libamd.amd_l_valid(n_row::SS_Int, n_col::SS_Int, Ap::Ptr{SS_Int}, Ai::Ptr{SS_Int})::Cint
 end
 
 function amd_defaults(Control)

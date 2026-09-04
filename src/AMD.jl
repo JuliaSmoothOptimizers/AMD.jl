@@ -6,7 +6,9 @@ using SuiteSparse_jll
 
 import Base.show, Base.print
 
-const SS_Int = Base.Sys.WORD_SIZE == 32 ? Int32 : Int64
+# Julia counterpart of `SuiteSparse_long`, the integer type of the `*_l` entry
+# points, which is `int64_t` on every platform since SuiteSparse 6.
+const SS_Int = Int64
 
 include("wrappers/amd.jl")
 include("wrappers/camd.jl")

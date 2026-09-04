@@ -35,7 +35,7 @@ function colamd_l(n_row, n_col, Alen, A, p, knobs, stats)
     p::Ptr{SS_Int},
     knobs::Ptr{Cdouble},
     stats::Ptr{SS_Int},
-  )::SS_Int
+  )::Cint
 end
 
 function symamd(n, A, p, perm, knobs, stats, allocate, release)
@@ -61,7 +61,7 @@ function symamd_l(n, A, p, perm, knobs, stats, allocate, release)
     stats::Ptr{SS_Int},
     allocate::Ptr{Cvoid},
     release::Ptr{Cvoid},
-  )::SS_Int
+  )::Cint
 end
 
 function colamd_report(stats)

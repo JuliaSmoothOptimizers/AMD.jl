@@ -37,7 +37,7 @@ function ccolamd_l(n_row, n_col, Alen, A, p, knobs, stats, cmember)
     knobs::Ptr{Cdouble},
     stats::Ptr{SS_Int},
     cmember::Ptr{SS_Int},
-  )::SS_Int
+  )::Cint
 end
 
 function csymamd(n, A, p, perm, knobs, stats, allocate, release, cmember, stype)
@@ -67,7 +67,7 @@ function csymamd_l(n, A, p, perm, knobs, stats, allocate, release, cmember, styp
     release::Ptr{Cvoid},
     cmember::Ptr{SS_Int},
     stype::SS_Int,
-  )::SS_Int
+  )::Cint
 end
 
 function ccolamd_report(stats)
@@ -155,7 +155,7 @@ function ccolamd2_l(
     p_nfr::Ptr{SS_Int},
     InFront::Ptr{SS_Int},
     cmember::Ptr{SS_Int},
-  )::SS_Int
+  )::Cint
 end
 
 function ccolamd_apply_order(Front, Order, Temp, nn, nfr)
